@@ -1,3 +1,210 @@
+# sympy-satassume: SymPy with pluggable assumption backends
+
+This repository is a copy of [SymPy](https://github.com/sympy/sympy) (at
+upstream commit
+[`751a370`](https://github.com/sympy/sympy/commit/751a37041610a83fb22559bc0618f84623fcea04),
+with its history) in which SymPy's assumption systems are answered by a
+pluggable **backend**. The default backend is
+[satassume](https://github.com/tilorc-bot/satassume), a SAT (CDCL) based
+engine, which replaces **both** assumption systems, with **no fallback** to
+SymPy's own code: its answer is returned as it is, `None` included.
+
+It is an experiment, not a SymPy release, and it is not affiliated with the
+SymPy project. The package is still imported as `sympy`.
+
+SymPy has two assumption systems:
+
+- the *old* system: the `expr.is_*` properties (`sympy/core/assumptions.py`
+  and the `_eval_is_*` handlers);
+- the *new* system: `sympy.assumptions.ask.ask` and what is built on it, such
+  as `refine`.
+
+## Backends
+
+| backend | old system (`expr.is_*`) | new system (`ask`, `refine`) |
+|---|---|---|
+| `satassume` (default) | satassume (`Engine.is_`) | satassume (`satassume.sympy_api.ask`) |
+| `sympy` | SymPy | SymPy (identical to upstream) |
+| `sympy_extras` | SymPy | [sympy-extras](https://github.com/Upabjojr/sympy-extras) (`sympy_extras.assumptions.ask`) |
+
+Choose the backend when `sympy` is imported, with an environment variable:
+
+```
+SYMPY_ASSUMPTIONS_BACKEND=satassume     # the default
+SYMPY_ASSUMPTIONS_BACKEND=sympy         # SymPy's own assumptions
+SYMPY_ASSUMPTIONS_BACKEND=sympy_extras  # ask/refine through sympy-extras
+```
+
+`SYMPY_ASSUMPTIONS_BACKEND_OLD` and `SYMPY_ASSUMPTIONS_BACKEND_NEW` choose the
+backend of one system only, for example `SYMPY_ASSUMPTIONS_BACKEND_OLD=sympy`
+with the default keeps the `is_*` properties of SymPy and answers only `ask`
+with satassume. To see which backends are active:
+
+```python
+>>> from sympy.assumptions.backends import active_backends
+>>> active_backends()
+{'old': 'satassume', 'new': 'satassume'}
+```
+
+The pytest header also shows them (`assumptions backends: old=... new=...`).
+
+How it works (`sympy/assumptions/backends/`):
+
+- A backend is a module that may define `ask(proposition, assumptions)` (new
+  system), `is_(expr, fact)` (old system) and `setup()`. A system whose
+  function is missing stays with SymPy's code.
+- The backend module is imported at the end of `import sympy` (both satassume
+  and sympy-extras import SymPy, so they cannot be imported earlier).
+- New system: `ask()` calls the backend after checking and sympifying its
+  arguments and merging the global assumptions. Every caller of `ask`
+  (`refine`, the handlers, matrices, ...) goes through it.
+- Old system: the module function `sympy.core.assumptions._ask`, which every
+  `is_*` property calls on a miss of the object's cache, is replaced. The
+  backend's answer is stored in the cache of the object; nothing else is
+  deduced from it.
+- Re-entrancy: while a backend runs, every query it makes in turn (satassume
+  reads facts of numbers through `is_*`; sympy-extras calls `sympy.ask`) is
+  answered by SymPy's own code.
+- `sympy_extras` translates each `Q` predicate to a statement of sympy-extras
+  (`Q.positive(x)` to `x > 0`, `Q.integer(x)` to
+  `Contains(x, Integers)`, `Q.even(x)` to `Contains(x/2, Integers)`, `Q.gt(x, y)`
+  to `x > y`, ...). A proposition with a predicate that has no statement
+  (`Q.finite`, `Q.prime`, the `extended_*` and matrix predicates, ...) gets
+  `None`. Predicates without a statement in the assumptions are passed on
+  unchanged, and sympy-extras gives them to SymPy's `ask`.
+- `sympy_extras` answers only the new system. Routing `is_*` through it as
+  well was tried and measured (`sympy/core/tests/test_arit.py` and
+  `sympy/integrals/tests/test_integrals.py`, 303 tests, `-n 4`): with only
+  `ask` through sympy-extras, 303 pass in 35 s; with `is_*` as well, 193 fail
+  and an xdist worker crashes (144 s) when facts without a statement answer
+  `None`, and 181 fail (116 s) even when those facts are left to SymPy.
+  `integrate(x*exp(x), x)` raises `ValueError`. Most facts of the old system
+  (`commutative`, `finite`, `extended_real`, ...) have no statement in
+  sympy-extras.
+
+The change to SymPy itself is small: `sympy/assumptions/backends/` (new),
+a hook of a few lines in `sympy/assumptions/ask.py`, 3 lines at the end of
+`sympy/__init__.py`, the xfail hook in `conftest.py`, and `setup.py`.
+
+## Installation
+
+```
+pip install "sympy @ git+https://github.com/tilorc-bot/sympy-satassume"
+pip install "sympy[sympy_extras] @ git+https://github.com/tilorc-bot/sympy-satassume"  # with sympy-extras
+```
+
+or, from a clone, `pip install -e .` (or `-e '.[sympy_extras]'`).
+
+Pinned dependencies (`setup.py`):
+
+- satassume `5a7d3b8d9e8e1a8d28a1f05892ff581ab4446bc9` (a dependency:
+  `satassume @ git+https://github.com/tilorc-bot/satassume@5a7d3b8...`);
+- sympy-extras `ae8f9f6c959111413c2fbe0675ce76e52e4d7502` (the optional extra
+  `sympy_extras`).
+
+sympy-extras requires `sympy>=1.14`. This copy is `sympy 1.15.0.dev0`, which
+satisfies it, so installing the extra (or sympy-extras afterwards, without
+`--upgrade`) keeps this copy; check with
+`python -c "import sympy; print(sympy.__file__)"`. Do not run
+`pip install -U sympy-extras`: it may replace this copy with SymPy from PyPI.
+
+## Test-suite results per backend
+
+The full test suite without slow tests and doctests (SymPy's defaults), run
+in 150 chunks (`bin/assumption_backends/chunks.txt`) with `pytest -n N
+--timeout=60` (N xdist workers, given per run below), Python 3.14.8, x86_64
+Linux. The expected failures of each
+backend are listed, with a cause tag, in **one file per backend**:
+
+- [`sympy/testing/assumption_backend_xfails/satassume.txt`](sympy/testing/assumption_backend_xfails/satassume.txt)
+- [`sympy/testing/assumption_backend_xfails/sympy_extras.txt`](sympy/testing/assumption_backend_xfails/sympy_extras.txt)
+
+The root `conftest.py` marks the listed tests as non-strict `xfail` (tests
+tagged `timeout` or `recursion` are not run) and reports the collection error
+of a listed module as a skip. `pytest --no-backend-xfails` turns this off.
+See [the README of that directory](sympy/testing/assumption_backend_xfails/README.md).
+
+Measured on 2026-10-18 with the lists as committed (464 entries for
+satassume, 48 for sympy_extras):
+
+| backend | `-n` | tests | passed | failed | xfailed: listed + upstream | xpassed: listed + upstream | skipped | time (sum of chunks) |
+|---|---|---|---|---|---|---|---|---|
+| `sympy` | 4 | 14330 | 13265 | 0 | 0 + 329 | 0 + 2 | 734 | 899 s |
+| `satassume` | 16 | 14317 | 12789 | **0** | 462 + 324 | 1 + 7 | 734 | 891 s |
+| `sympy_extras` | 4 | 14330 | 13217 | **0** | 48 + 326 | 0 + 5 | 734 | 741 s |
+
+- *listed* counts the tests in the backend's xfail file, *upstream* SymPy's
+  own `XFAIL` tests. Of the 462 listed xfails of satassume, 28 (tags
+  `timeout` and `recursion`) are not run. The listed xpass of satassume is
+  `test_arit.py::test_pow_im`, which fails only in some runs.
+- satassume has 13 tests fewer: `sympy/solvers/ode/tests/test_single.py`
+  fails at collection with satassume and is reported as one skipped module.
+- With the `sympy` backend the results are those of upstream SymPy at
+  `751a370` (the same run of upstream without this change, in the
+  experiment, gave the same outcome for every test; this copy adds the 3
+  tests of `sympy/assumptions/tests/test_backends.py`).
+- `sympy_extras` without its list (`--no-backend-xfails`, `-n 4`, 1000 s):
+  13217 passed, 48 failed, 326 xfailed, 5 xpassed, 734 skipped. The 48
+  failures are the list (`assumptions` 24, `matrices` 17, `tensor` 3,
+  `core` 2, `codegen` 1, `logic` 1).
+- satassume with its first list (443 entries, seeded from the experiment,
+  `-n 4`, 999 s): 2 unexpected failures; a second sweep with 461 entries
+  (`-n 2`, 1347 s): 2 others. Both were added, together with the tests the
+  failures moved to in reruns of the affected chunks (see the header of
+  `satassume.txt`).
+
+The runs shared the machine with other jobs (the `-n 2` and `-n 4` runs with
+heavy load, the `-n 16` run with light load). Times, and which tests hit the
+60 s limit or a `RecursionError`, depend on the load, on `-n`, and on the
+order of the tests in each worker: satassume keeps state between queries
+and some of its failures are order dependent. Other runs may therefore show
+a few unexpected failures or xpasses.
+
+## Regenerating the xfail lists
+
+The scripts are in `bin/assumption_backends/`:
+
+- `run_chunks.sh BACKEND CHUNKFILE OUTDIR [pytest args]` runs the chunks,
+  each with `timeout 270` (split a chunk that hits it), with `NPROC` xdist
+  workers (default 4). It is resumable: chunks already in `OUTDIR/status.tsv`
+  are skipped. It records every test outcome with `outcomes_plugin.py`.
+- `xfails.py summary RUNDIR [BASEDIR]` prints the counts, the unexpected
+  failures, and with `BASEDIR` the failures that are new against it.
+- `xfails.py make BACKEND RUNDIR BASEDIR [PREVIOUS]` writes the list: the
+  tests that fail in `RUNDIR` but not in `BASEDIR`, with the tags of
+  `PREVIOUS` kept and new tags derived from the failure message.
+
+```
+B=bin/assumption_backends
+$B/run_chunks.sh sympy $B/chunks.txt /tmp/run-sympy
+$B/run_chunks.sh satassume $B/chunks.txt /tmp/run-satassume --no-backend-xfails
+python $B/xfails.py make satassume /tmp/run-satassume /tmp/run-sympy \
+    sympy/testing/assumption_backend_xfails/satassume.txt > /tmp/satassume.txt
+mv /tmp/satassume.txt sympy/testing/assumption_backend_xfails/satassume.txt
+$B/run_chunks.sh satassume $B/chunks.txt /tmp/check-satassume   # verify
+python $B/xfails.py summary /tmp/check-satassume                 # 0 unexpected
+```
+
+Some failures depend on the order of the tests and on the load of the machine
+(timeouts), so a verification run may show a few unexpected failures that the
+first run did not: add them (rerun `make` with both runs, or add the lines by
+hand) and keep the entries that pass (XPASS) unless they pass in several runs.
+
+The tags of `satassume.txt` (`none`, `wrong`, `extra`, `agree`, `unrecorded`,
+`engine-exc`, `timeout`, `recursion`) come from a root-cause analysis of the
+experiment that preceded this repository: every satassume answer was recorded
+during the failing tests and compared with SymPy's answer to the same query
+in a separate process. `xfails.py make` only derives the coarser tags
+`assert`, `none` (an assertion `assert None is ...`), `exc-<Exception>`,
+`timeout` and `recursion` from the failure message.
+
+## License
+
+SymPy's [LICENSE](LICENSE) (New BSD) covers this repository; see
+[AUTHORS](AUTHORS) for SymPy's authors. The README of SymPy follows.
+
+---
+
 # SymPy
 
 [![pypi version](https://img.shields.io/pypi/v/sympy.svg)](https://pypi.python.org/pypi/sympy)
