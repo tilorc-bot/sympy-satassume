@@ -1,0 +1,29 @@
+# SymPy's own CI workflows are removed in this repository. This light check
+# runs the assumptions tests with each assumptions backend.
+name: assumptions backends
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        backend: [sympy, satassume, sympy_extras]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: pip install -e '.[sympy_extras]' pytest pytest-timeout hypothesis
+      - run: python -m pytest sympy/assumptions --timeout=300 -p no:cacheprovider
+        env:
+          SYMPY_ASSUMPTIONS_BACKEND: ${{ matrix.backend }}
