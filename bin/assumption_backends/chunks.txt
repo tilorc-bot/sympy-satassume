@@ -1,0 +1,150 @@
+algebras sympy/algebras
+assumptions__00 sympy/assumptions/tests/test_assumptions_2.py sympy/assumptions/tests/test_context.py sympy/assumptions/tests/test_matrices.py
+assumptions__01 sympy/assumptions/tests/test_query.py sympy/assumptions/tests/test_refine.py sympy/assumptions/tests/test_rel_queries.py
+assumptions__02 sympy/assumptions/tests/test_satask.py sympy/assumptions/tests/test_sathandlers.py sympy/assumptions/tests/test_wrapper.py
+calculus sympy/calculus
+categories sympy/categories
+codegen__00 sympy/codegen/tests/test_abstract_nodes.py sympy/codegen/tests/test_algorithms.py sympy/codegen/tests/test_applications.py sympy/codegen/tests/test_approximations.py sympy/codegen/tests/test_ast.py sympy/codegen/tests/test_cfunctions.py sympy/codegen/tests/test_cnodes.py sympy/codegen/tests/test_cxxnodes.py
+codegen__01 sympy/codegen/tests/test_fnodes.py sympy/codegen/tests/test_matrix_nodes.py sympy/codegen/tests/test_numpy_nodes.py sympy/codegen/tests/test_pynodes.py sympy/codegen/tests/test_pyutils.py sympy/codegen/tests/test_rewriting.py sympy/codegen/tests/test_scipy_nodes.py
+combinatorics__00 sympy/combinatorics/tests/test_character_table.py sympy/combinatorics/tests/test_coset_table.py sympy/combinatorics/tests/test_fp_groups.py sympy/combinatorics/tests/test_free_groups.py sympy/combinatorics/tests/test_galois.py sympy/combinatorics/tests/test_generators.py
+combinatorics__01 sympy/combinatorics/tests/test_graycode.py sympy/combinatorics/tests/test_group_constructs.py sympy/combinatorics/tests/test_group_numbers.py sympy/combinatorics/tests/test_homomorphisms.py sympy/combinatorics/tests/test_named_groups.py sympy/combinatorics/tests/test_partitions.py
+combinatorics__02 sympy/combinatorics/tests/test_pc_groups.py sympy/combinatorics/tests/test_perm_groups.py sympy/combinatorics/tests/test_permutations.py sympy/combinatorics/tests/test_polyhedron.py sympy/combinatorics/tests/test_prufer.py sympy/combinatorics/tests/test_rewriting.py
+combinatorics__03 sympy/combinatorics/tests/test_schur_number.py sympy/combinatorics/tests/test_subsets.py sympy/combinatorics/tests/test_tensor_can.py sympy/combinatorics/tests/test_testutil.py sympy/combinatorics/tests/test_util.py
+concrete sympy/concrete
+core__00 sympy/core/tests/test_args.py sympy/core/tests/test_arit.py sympy/core/tests/test_assumptions.py sympy/core/tests/test_basic.py
+core__01 sympy/core/tests/test_cache.py sympy/core/tests/test_compatibility.py sympy/core/tests/test_complex.py sympy/core/tests/test_constructor_postprocessor.py
+core__02 sympy/core/tests/test_containers.py sympy/core/tests/test_count_ops.py sympy/core/tests/test_diff.py sympy/core/tests/test_equal.py
+core__03 sympy/core/tests/test_eval.py sympy/core/tests/test_evalf.py sympy/core/tests/test_expand.py sympy/core/tests/test_expr.py
+core__04 sympy/core/tests/test_exprtools.py sympy/core/tests/test_facts.py sympy/core/tests/test_function.py sympy/core/tests/test_kind.py
+core__05 sympy/core/tests/test_logic.py sympy/core/tests/test_match.py sympy/core/tests/test_multidimensional.py sympy/core/tests/test_noncommutative.py
+core__06 sympy/core/tests/test_numbers.py sympy/core/tests/test_operations.py sympy/core/tests/test_parameters.py sympy/core/tests/test_power.py
+core__07 sympy/core/tests/test_priority.py sympy/core/tests/test_random.py sympy/core/tests/test_relational.py sympy/core/tests/test_rules.py
+core__08 sympy/core/tests/test_singleton.py sympy/core/tests/test_sorting.py sympy/core/tests/test_subs.py sympy/core/tests/test_symbol.py
+core__09 sympy/core/tests/test_sympify.py sympy/core/tests/test_traversal.py sympy/core/tests/test_truediv.py sympy/core/tests/test_var.py
+crypto sympy/crypto
+diffgeom sympy/diffgeom
+discrete sympy/discrete
+external sympy/external
+functions__00 sympy/functions/combinatorial/tests/test_comb_factorials.py sympy/functions/combinatorial/tests/test_comb_numbers.py sympy/functions/elementary/tests/test_complexes.py
+functions__01 sympy/functions/elementary/tests/test_exponential.py sympy/functions/elementary/tests/test_hyperbolic.py sympy/functions/elementary/tests/test_integers.py
+functions__02 sympy/functions/elementary/tests/test_interface.py sympy/functions/elementary/tests/test_miscellaneous.py sympy/functions/elementary/tests/test_piecewise.py
+functions__03 sympy/functions/elementary/tests/test_trigonometric.py sympy/functions/special/tests/test_bessel.py sympy/functions/special/tests/test_beta_functions.py
+functions__04 sympy/functions/special/tests/test_bsplines.py sympy/functions/special/tests/test_delta_functions.py sympy/functions/special/tests/test_elliptic_functions.py
+functions__05 sympy/functions/special/tests/test_elliptic_integrals.py sympy/functions/special/tests/test_error_functions.py sympy/functions/special/tests/test_gamma_functions.py
+functions__06 sympy/functions/special/tests/test_hyper.py sympy/functions/special/tests/test_mathieu.py sympy/functions/special/tests/test_singularity_functions.py
+functions__07 sympy/functions/special/tests/test_spec_polynomials.py sympy/functions/special/tests/test_spherical_harmonics.py sympy/functions/special/tests/test_tensor_functions.py
+functions__08 sympy/functions/special/tests/test_zeta_functions.py
+geometry__00 sympy/geometry/tests/test_curve.py sympy/geometry/tests/test_ellipse.py sympy/geometry/tests/test_entity.py sympy/geometry/tests/test_geometrysets.py sympy/geometry/tests/test_line.py
+geometry__01 sympy/geometry/tests/test_parabola.py sympy/geometry/tests/test_plane.py sympy/geometry/tests/test_point.py sympy/geometry/tests/test_polygon.py sympy/geometry/tests/test_util.py
+holonomic sympy/holonomic
+integrals__00 sympy/integrals/tests/test_deltafunctions.py sympy/integrals/tests/test_failing_integrals.py
+integrals__01 sympy/integrals/tests/test_heurisch.py sympy/integrals/tests/test_integrals.py
+integrals__02 sympy/integrals/tests/test_intpoly.py sympy/integrals/tests/test_laplace.py
+integrals__03 sympy/integrals/tests/test_lineintegrals.py sympy/integrals/tests/test_manual.py
+integrals__04 sympy/integrals/tests/test_meijerint.py sympy/integrals/tests/test_prde.py
+integrals__05 sympy/integrals/tests/test_quadrature.py sympy/integrals/tests/test_rationaltools.py
+integrals__06 sympy/integrals/tests/test_rde.py sympy/integrals/tests/test_risch.py
+integrals__07 sympy/integrals/tests/test_singularityfunctions.py sympy/integrals/tests/test_transforms.py
+integrals__08 sympy/integrals/tests/test_trigonometry.py
+interactive sympy/interactive
+liealgebras sympy/liealgebras
+logic sympy/logic
+matrices__00 sympy/matrices/expressions/tests/test_adjoint.py sympy/matrices/expressions/tests/test_applyfunc.py sympy/matrices/expressions/tests/test_blockmatrix.py sympy/matrices/expressions/tests/test_companion.py
+matrices__01 sympy/matrices/expressions/tests/test_derivatives.py sympy/matrices/expressions/tests/test_determinant.py sympy/matrices/expressions/tests/test_diagonal.py sympy/matrices/expressions/tests/test_dotproduct.py
+matrices__02 sympy/matrices/expressions/tests/test_factorizations.py sympy/matrices/expressions/tests/test_fourier.py sympy/matrices/expressions/tests/test_funcmatrix.py sympy/matrices/expressions/tests/test_hadamard.py
+matrices__03 sympy/matrices/expressions/tests/test_indexing.py sympy/matrices/expressions/tests/test_inverse.py sympy/matrices/expressions/tests/test_kronecker.py sympy/matrices/expressions/tests/test_matadd.py
+matrices__04 sympy/matrices/expressions/tests/test_matexpr.py sympy/matrices/expressions/tests/test_matmul.py sympy/matrices/expressions/tests/test_matpow.py sympy/matrices/expressions/tests/test_permutation.py
+matrices__05 sympy/matrices/expressions/tests/test_sets.py sympy/matrices/expressions/tests/test_slice.py sympy/matrices/expressions/tests/test_special.py sympy/matrices/expressions/tests/test_trace.py
+matrices__06 sympy/matrices/expressions/tests/test_transpose.py sympy/matrices/tests/test_commonmatrix.py sympy/matrices/tests/test_decompositions.py sympy/matrices/tests/test_determinant.py
+matrices__07 sympy/matrices/tests/test_domains.py sympy/matrices/tests/test_eigen.py sympy/matrices/tests/test_graph.py sympy/matrices/tests/test_immutable.py
+matrices__08 sympy/matrices/tests/test_interactions.py sympy/matrices/tests/test_matrices.py sympy/matrices/tests/test_matrixbase.py sympy/matrices/tests/test_normalforms.py
+matrices__09 sympy/matrices/tests/test_reductions.py sympy/matrices/tests/test_repmatrix.py sympy/matrices/tests/test_solvers.py sympy/matrices/tests/test_sparse.py
+matrices__10 sympy/matrices/tests/test_sparsetools.py sympy/matrices/tests/test_subspaces.py
+multipledispatch sympy/multipledispatch
+ntheory__00 sympy/ntheory/tests/test_bbp_pi.py sympy/ntheory/tests/test_continued_fraction.py sympy/ntheory/tests/test_digits.py sympy/ntheory/tests/test_ecm.py sympy/ntheory/tests/test_egyptian_fraction.py sympy/ntheory/tests/test_elliptic_curve.py sympy/ntheory/tests/test_factor_.py sympy/ntheory/tests/test_generate.py
+ntheory__01 sympy/ntheory/tests/test_hypothesis.py sympy/ntheory/tests/test_modular.py sympy/ntheory/tests/test_multinomial.py sympy/ntheory/tests/test_partitions.py sympy/ntheory/tests/test_primetest.py sympy/ntheory/tests/test_qs.py sympy/ntheory/tests/test_residue.py
+parsing sympy/parsing
+physics__00 sympy/physics/biomechanics/tests/test_activation.py sympy/physics/biomechanics/tests/test_curve.py sympy/physics/biomechanics/tests/test_mixin.py sympy/physics/biomechanics/tests/test_musculotendon.py sympy/physics/continuum_mechanics/tests/test_arch.py
+physics__01 sympy/physics/continuum_mechanics/tests/test_beam.py sympy/physics/continuum_mechanics/tests/test_cable.py sympy/physics/continuum_mechanics/tests/test_column.py sympy/physics/continuum_mechanics/tests/test_truss.py sympy/physics/control/tests/test_control_plots.py
+physics__02 sympy/physics/control/tests/test_lti.py sympy/physics/control/tests/test_routh_table.py sympy/physics/hep/tests/test_gamma_matrices.py sympy/physics/mechanics/tests/test_actuator.py sympy/physics/mechanics/tests/test_body.py
+physics__03 sympy/physics/mechanics/tests/test_functions.py sympy/physics/mechanics/tests/test_inertia.py sympy/physics/mechanics/tests/test_joint.py sympy/physics/mechanics/tests/test_jointsmethod.py sympy/physics/mechanics/tests/test_kane.py
+physics__04 sympy/physics/mechanics/tests/test_kane2.py sympy/physics/mechanics/tests/test_kane3.py sympy/physics/mechanics/tests/test_kane4.py sympy/physics/mechanics/tests/test_kane5.py sympy/physics/mechanics/tests/test_lagrange.py
+physics__05 sympy/physics/mechanics/tests/test_lagrange2.py sympy/physics/mechanics/tests/test_linearity_of_velocity_constraints.py sympy/physics/mechanics/tests/test_linearize.py sympy/physics/mechanics/tests/test_loads.py sympy/physics/mechanics/tests/test_method.py
+physics__06 sympy/physics/mechanics/tests/test_models.py sympy/physics/mechanics/tests/test_particle.py sympy/physics/mechanics/tests/test_pathway.py sympy/physics/mechanics/tests/test_rigidbody.py sympy/physics/mechanics/tests/test_system.py
+physics__07 sympy/physics/mechanics/tests/test_system_class.py sympy/physics/mechanics/tests/test_wrapping_geometry.py sympy/physics/optics/tests/test_gaussopt.py sympy/physics/optics/tests/test_medium.py sympy/physics/optics/tests/test_polarization.py
+physics__08 sympy/physics/optics/tests/test_utils.py sympy/physics/optics/tests/test_waves.py sympy/physics/quantum/tests/test_anticommutator.py sympy/physics/quantum/tests/test_boson.py sympy/physics/quantum/tests/test_cartesian.py
+physics__09 sympy/physics/quantum/tests/test_cg.py sympy/physics/quantum/tests/test_circuitplot.py sympy/physics/quantum/tests/test_circuitutils.py sympy/physics/quantum/tests/test_commutator.py sympy/physics/quantum/tests/test_constants.py
+physics__10 sympy/physics/quantum/tests/test_dagger.py sympy/physics/quantum/tests/test_density.py sympy/physics/quantum/tests/test_fermion.py sympy/physics/quantum/tests/test_gate.py sympy/physics/quantum/tests/test_grover.py
+physics__11 sympy/physics/quantum/tests/test_hilbert.py sympy/physics/quantum/tests/test_identitysearch.py sympy/physics/quantum/tests/test_innerproduct.py sympy/physics/quantum/tests/test_kind.py sympy/physics/quantum/tests/test_matrixutils.py
+physics__12 sympy/physics/quantum/tests/test_operator.py sympy/physics/quantum/tests/test_operatorordering.py sympy/physics/quantum/tests/test_operatorset.py sympy/physics/quantum/tests/test_pauli.py sympy/physics/quantum/tests/test_piab.py
+physics__13 sympy/physics/quantum/tests/test_printing.py sympy/physics/quantum/tests/test_qapply.py sympy/physics/quantum/tests/test_qasm.py sympy/physics/quantum/tests/test_qexpr.py sympy/physics/quantum/tests/test_qft.py
+physics__14 sympy/physics/quantum/tests/test_qubit.py sympy/physics/quantum/tests/test_represent.py sympy/physics/quantum/tests/test_sho1d.py sympy/physics/quantum/tests/test_shor.py sympy/physics/quantum/tests/test_spin.py
+physics__15 sympy/physics/quantum/tests/test_state.py sympy/physics/quantum/tests/test_tensorproduct.py sympy/physics/quantum/tests/test_trace.py sympy/physics/quantum/tests/test_transforms.py sympy/physics/tests/test_clebsch_gordan.py
+physics__16 sympy/physics/tests/test_hydrogen.py sympy/physics/tests/test_paulialgebra.py sympy/physics/tests/test_physics_matrices.py sympy/physics/tests/test_pring.py sympy/physics/tests/test_qho_1d.py
+physics__17 sympy/physics/tests/test_secondquant.py sympy/physics/tests/test_sho.py sympy/physics/units/tests/test_dimensions.py sympy/physics/units/tests/test_dimensionsystem.py sympy/physics/units/tests/test_prefixes.py
+physics__18 sympy/physics/units/tests/test_quantities.py sympy/physics/units/tests/test_unit_system_cgs_gauss.py sympy/physics/units/tests/test_unitsystem.py sympy/physics/units/tests/test_util.py sympy/physics/vector/tests/test_dyadic.py
+physics__19 sympy/physics/vector/tests/test_fieldfunctions.py sympy/physics/vector/tests/test_frame.py sympy/physics/vector/tests/test_functions.py sympy/physics/vector/tests/test_output.py sympy/physics/vector/tests/test_point.py
+physics__20 sympy/physics/vector/tests/test_printing.py sympy/physics/vector/tests/test_vector.py
+plotting sympy/plotting
+polys__00 sympy/polys/agca/tests/test_extensions.py sympy/polys/agca/tests/test_homomorphisms.py sympy/polys/agca/tests/test_ideals.py sympy/polys/agca/tests/test_modules.py sympy/polys/domains/tests/test_domains.py
+polys__01 sympy/polys/domains/tests/test_polynomialring.py sympy/polys/domains/tests/test_quotientring.py sympy/polys/matrices/tests/test_ddm.py sympy/polys/matrices/tests/test_dense.py sympy/polys/matrices/tests/test_domainmatrix.py
+polys__02 sympy/polys/matrices/tests/test_domainscalar.py sympy/polys/matrices/tests/test_eigen.py sympy/polys/matrices/tests/test_fflu.py sympy/polys/matrices/tests/test_inverse.py sympy/polys/matrices/tests/test_linsolve.py
+polys__03 sympy/polys/matrices/tests/test_lll.py sympy/polys/matrices/tests/test_normalforms.py sympy/polys/matrices/tests/test_nullspace.py sympy/polys/matrices/tests/test_rref.py sympy/polys/matrices/tests/test_sdm.py
+polys__04 sympy/polys/matrices/tests/test_xxm.py sympy/polys/numberfields/tests/test_basis.py sympy/polys/numberfields/tests/test_galoisgroups.py sympy/polys/numberfields/tests/test_minpoly.py sympy/polys/numberfields/tests/test_modules.py
+polys__05 sympy/polys/numberfields/tests/test_numbers.py sympy/polys/numberfields/tests/test_primes.py sympy/polys/numberfields/tests/test_subfield.py sympy/polys/numberfields/tests/test_utilities.py sympy/polys/series/tests/test_hypothesis.py
+polys__06 sympy/polys/series/tests/test_ring.py sympy/polys/tests/test_appellseqs.py sympy/polys/tests/test_constructor.py sympy/polys/tests/test_densearith.py sympy/polys/tests/test_densebasic.py
+polys__07 sympy/polys/tests/test_densetools.py sympy/polys/tests/test_dispersion.py sympy/polys/tests/test_distributedmodules.py sympy/polys/tests/test_euclidtools.py sympy/polys/tests/test_factortools.py
+polys__08 sympy/polys/tests/test_fields.py sympy/polys/tests/test_galoistools.py sympy/polys/tests/test_groebnertools.py sympy/polys/tests/test_heuristicgcd.py sympy/polys/tests/test_hypothesis.py
+polys__09 sympy/polys/tests/test_injections.py sympy/polys/tests/test_modulargcd.py sympy/polys/tests/test_monomials.py sympy/polys/tests/test_multivariate_resultants.py sympy/polys/tests/test_orderings.py
+polys__10 sympy/polys/tests/test_orthopolys.py sympy/polys/tests/test_partfrac.py sympy/polys/tests/test_polyclasses.py sympy/polys/tests/test_polyfuncs.py sympy/polys/tests/test_polymatrix.py
+polys__11 sympy/polys/tests/test_polyoptions.py sympy/polys/tests/test_polyroots.py sympy/polys/tests/test_polytools.py sympy/polys/tests/test_polyutils.py sympy/polys/tests/test_puiseux.py
+polys__12 sympy/polys/tests/test_pythonrational.py sympy/polys/tests/test_rationaltools.py sympy/polys/tests/test_ring_series.py sympy/polys/tests/test_rings.py sympy/polys/tests/test_rootisolation.py
+polys__13 sympy/polys/tests/test_rootoftools.py sympy/polys/tests/test_solvers.py sympy/polys/tests/test_specialpolys.py sympy/polys/tests/test_sqfreetools.py sympy/polys/tests/test_subresultants_qq_zz.py
+polys__14 sympy/polys/tests/test_zippel.py
+printing__00 sympy/printing/pretty/tests/test_pretty.py sympy/printing/tests/test_aesaracode.py sympy/printing/tests/test_c.py sympy/printing/tests/test_codeprinter.py sympy/printing/tests/test_conventions.py
+printing__01 sympy/printing/tests/test_cupy.py sympy/printing/tests/test_cxx.py sympy/printing/tests/test_dot.py sympy/printing/tests/test_fortran.py sympy/printing/tests/test_glsl.py
+printing__02 sympy/printing/tests/test_gtk.py sympy/printing/tests/test_jax.py sympy/printing/tests/test_jscode.py sympy/printing/tests/test_julia.py sympy/printing/tests/test_lambdarepr.py
+printing__03 sympy/printing/tests/test_latex.py sympy/printing/tests/test_llvmjit.py sympy/printing/tests/test_maple.py sympy/printing/tests/test_mathematica.py sympy/printing/tests/test_mathml.py
+printing__04 sympy/printing/tests/test_numpy.py sympy/printing/tests/test_octave.py sympy/printing/tests/test_precedence.py sympy/printing/tests/test_preview.py sympy/printing/tests/test_pycode.py
+printing__05 sympy/printing/tests/test_python.py sympy/printing/tests/test_rcode.py sympy/printing/tests/test_repr.py sympy/printing/tests/test_rust.py sympy/printing/tests/test_smtlib.py
+printing__06 sympy/printing/tests/test_str.py sympy/printing/tests/test_tableform.py sympy/printing/tests/test_tensorflow.py sympy/printing/tests/test_theanocode.py sympy/printing/tests/test_torch.py
+printing__07 sympy/printing/tests/test_tree.py
+sandbox sympy/sandbox
+series__00 sympy/series/tests/test_approximants.py sympy/series/tests/test_aseries.py sympy/series/tests/test_demidovich.py sympy/series/tests/test_formal.py
+series__01 sympy/series/tests/test_fourier.py sympy/series/tests/test_gruntz.py sympy/series/tests/test_kauers.py sympy/series/tests/test_limits.py
+series__02 sympy/series/tests/test_limitseq.py sympy/series/tests/test_lseries.py sympy/series/tests/test_nseries.py sympy/series/tests/test_order.py
+series__03 sympy/series/tests/test_residues.py sympy/series/tests/test_sequences.py sympy/series/tests/test_series.py
+sets__00 sympy/sets/tests/test_conditionset.py sympy/sets/tests/test_contains.py sympy/sets/tests/test_fancysets.py sympy/sets/tests/test_ordinals.py
+sets__01 sympy/sets/tests/test_powerset.py sympy/sets/tests/test_setexpr.py sympy/sets/tests/test_sets.py
+simplify__00 sympy/simplify/tests/test_combsimp.py sympy/simplify/tests/test_cse.py sympy/simplify/tests/test_cse_diff.py
+simplify__01 sympy/simplify/tests/test_epathtools.py sympy/simplify/tests/test_fu.py sympy/simplify/tests/test_function.py
+simplify__02 sympy/simplify/tests/test_gammasimp.py sympy/simplify/tests/test_hyperexpand.py sympy/simplify/tests/test_powsimp.py
+simplify__03 sympy/simplify/tests/test_radsimp.py sympy/simplify/tests/test_ratsimp.py sympy/simplify/tests/test_rewrite.py
+simplify__04 sympy/simplify/tests/test_simplify.py sympy/simplify/tests/test_sqrtdenest.py sympy/simplify/tests/test_trigsimp.py
+solvers__00 sympy/solvers/diophantine/tests/test_diophantine.py sympy/solvers/ode/tests/test_lie_group.py
+solvers__01 sympy/solvers/ode/tests/test_ode.py sympy/solvers/ode/tests/test_riccati.py
+solvers__02 sympy/solvers/ode/tests/test_single.py sympy/solvers/ode/tests/test_subscheck.py
+solvers__03 sympy/solvers/ode/tests/test_systems.py sympy/solvers/tests/test_constantsimp.py
+solvers__04 sympy/solvers/tests/test_decompogen.py sympy/solvers/tests/test_inequalities.py
+solvers__05 sympy/solvers/tests/test_numeric.py sympy/solvers/tests/test_pde.py
+solvers__06 sympy/solvers/tests/test_polysys.py sympy/solvers/tests/test_recurr.py
+solvers__07 sympy/solvers/tests/test_simplex.py sympy/solvers/tests/test_solvers.py
+solvers__08 sympy/solvers/tests/test_solveset.py
+stats__00 sympy/stats/sampling/tests/test_sample_continuous_rv.py sympy/stats/sampling/tests/test_sample_discrete_rv.py sympy/stats/sampling/tests/test_sample_finite_rv.py
+stats__01 sympy/stats/tests/test_compound_rv.py sympy/stats/tests/test_continuous_rv.py sympy/stats/tests/test_discrete_rv.py
+stats__02 sympy/stats/tests/test_error_prop.py sympy/stats/tests/test_finite_rv.py sympy/stats/tests/test_joint_rv.py
+stats__03 sympy/stats/tests/test_matrix_distributions.py sympy/stats/tests/test_mix.py sympy/stats/tests/test_random_matrix.py
+stats__04 sympy/stats/tests/test_rv.py sympy/stats/tests/test_stochastic_process.py sympy/stats/tests/test_symbolic_multivariate.py
+stats__05 sympy/stats/tests/test_symbolic_probability.py
+strategies sympy/strategies
+tensor__00 sympy/tensor/array/expressions/tests/test_array_expressions.py sympy/tensor/array/expressions/tests/test_arrayexpr_derivatives.py sympy/tensor/array/expressions/tests/test_as_explicit.py sympy/tensor/array/expressions/tests/test_convert_array_to_indexed.py sympy/tensor/array/expressions/tests/test_convert_array_to_matrix.py sympy/tensor/array/expressions/tests/test_convert_indexed_to_array.py
+tensor__01 sympy/tensor/array/expressions/tests/test_convert_matrix_to_array.py sympy/tensor/array/expressions/tests/test_deprecated_conv_modules.py sympy/tensor/array/expressions/tests/test_simplification.py sympy/tensor/array/tests/test_array_comprehension.py sympy/tensor/array/tests/test_array_derivatives.py sympy/tensor/array/tests/test_arrayop.py
+tensor__02 sympy/tensor/array/tests/test_immutable_ndim_array.py sympy/tensor/array/tests/test_mutable_ndim_array.py sympy/tensor/array/tests/test_ndim_array.py sympy/tensor/array/tests/test_ndim_array_conversions.py sympy/tensor/tests/test_functions.py sympy/tensor/tests/test_index_methods.py
+tensor__03 sympy/tensor/tests/test_indexed.py sympy/tensor/tests/test_printing.py sympy/tensor/tests/test_tensor.py sympy/tensor/tests/test_tensor_element.py sympy/tensor/tests/test_tensor_operators.py
+testing sympy/testing
+unify sympy/unify
+utilities__00 sympy/utilities/_compilation/tests/test_compilation.py sympy/utilities/tests/test_autowrap.py sympy/utilities/tests/test_codegen.py sympy/utilities/tests/test_codegen_julia.py sympy/utilities/tests/test_codegen_octave.py sympy/utilities/tests/test_codegen_rust.py sympy/utilities/tests/test_decorator.py
+utilities__01 sympy/utilities/tests/test_deprecated.py sympy/utilities/tests/test_enumerative.py sympy/utilities/tests/test_exceptions.py sympy/utilities/tests/test_iterables.py sympy/utilities/tests/test_lambdify.py sympy/utilities/tests/test_matchpy_connector.py sympy/utilities/tests/test_mathml.py
+utilities__02 sympy/utilities/tests/test_misc.py sympy/utilities/tests/test_pickling.py sympy/utilities/tests/test_source.py sympy/utilities/tests/test_timeutils.py sympy/utilities/tests/test_wester.py sympy/utilities/tests/test_xxe.py
+vector__00 sympy/vector/tests/test_coordsysrect.py sympy/vector/tests/test_dyadic.py sympy/vector/tests/test_field_functions.py sympy/vector/tests/test_functions.py sympy/vector/tests/test_implicitregion.py
+vector__01 sympy/vector/tests/test_integrals.py sympy/vector/tests/test_operators.py sympy/vector/tests/test_parametricregion.py sympy/vector/tests/test_printing.py sympy/vector/tests/test_vector.py

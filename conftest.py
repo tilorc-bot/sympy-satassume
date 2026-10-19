@@ -9,11 +9,35 @@ import sys
 import warnings
 import pytest
 from sympy.testing.runtests import setup_pprint, _get_doctest_blacklist
+from sympy.assumptions.backends import active_backends, xfail_key
 
 durations_path = os.path.join(os.path.dirname(__file__), '.ci', 'durations.json')
 blacklist_path = os.path.join(os.path.dirname(__file__), '.ci', 'blacklisted.json')
 
 collect_ignore = _get_doctest_blacklist()
+
+# Tests that are expected to fail with the active assumptions backend, see
+# sympy/testing/assumption_backend_xfails/README.md.
+backend_xfails_dir = os.path.join(os.path.dirname(__file__), 'sympy', 'testing',
+                                  'assumption_backend_xfails')
+backend_xfails_key = xfail_key()
+backend_xfails_path = os.path.join(backend_xfails_dir, backend_xfails_key + '.txt')
+NOT_RUN_TAGS = ('timeout', 'recursion')
+
+
+def _read_backend_xfails(path):
+    tests = {}
+    if os.path.exists(path):
+        with open(path, encoding='utf-8') as stream:
+            for line in stream:
+                line = line.strip()
+                if line and not line.startswith('#'):
+                    tag, nodeid = line.split(None, 1)
+                    tests[nodeid] = tag
+    return tests
+
+
+backend_xfails = _read_backend_xfails(backend_xfails_path)
 
 # Set up printing for doctests
 setup_pprint(disable_line_wrap=False)
@@ -47,6 +71,8 @@ def pytest_addoption(parser):
                      help="Skip very slow tests (see ./ci/parse_durations_log.py)")
     parser.addoption("--veryquickcheck", dest="runveryquick", action="store_true",
                      help="Skip slow & very slow (see ./ci/parse_durations_log.py)")
+    parser.addoption("--no-backend-xfails", dest="nobackendxfails", action="store_true",
+                     help="Do not apply the expected failures of the assumptions backend")
 
 
 def pytest_configure(config):
@@ -69,3 +95,41 @@ def pytest_runtest_setup(item):
         if item.nodeid in blacklist_group:
             pytest.skip("blacklisted test, see %s" % blacklist_path)
             return
+
+
+def pytest_report_header(config):
+    backends = active_backends()
+    if config.getvalue("nobackendxfails"):
+        xfails = 'not applied (--no-backend-xfails)'
+    elif os.path.exists(backend_xfails_path):
+        xfails = '%d entries from %s' % (len(backend_xfails), backend_xfails_path)
+    else:
+        xfails = 'none (no file %s)' % backend_xfails_path
+    return 'assumptions backends: old=%s new=%s; backend xfails: %s' % (
+        backends['old'], backends['new'], xfails)
+
+
+def _backend_xfail_reason(tag):
+    return 'assumptions backend %s: %s' % (backend_xfails_key, tag)
+
+
+def pytest_collection_modifyitems(config, items):
+    if config.getvalue("nobackendxfails"):
+        return
+    for item in items:
+        tag = backend_xfails.get(item.nodeid)
+        if tag is not None:
+            item.add_marker(pytest.mark.xfail(reason=_backend_xfail_reason(tag),
+                                              run=tag not in NOT_RUN_TAGS, strict=False))
+
+
+@pytest.hookimpl(wrapper=True)
+def pytest_make_collect_report(collector):
+    report = yield
+    if (report.failed and isinstance(collector, pytest.Module)
+            and collector.nodeid in backend_xfails
+            and not collector.config.getvalue("nobackendxfails")):
+        report.outcome = 'skipped'
+        report.longrepr = (str(collector.path), None, 'Skipped: collection fails, '
+                           + _backend_xfail_reason(backend_xfails[collector.nodeid]))
+    return report

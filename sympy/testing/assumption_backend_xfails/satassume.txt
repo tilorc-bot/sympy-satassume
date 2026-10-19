@@ -1,0 +1,466 @@
+# Expected failures of the test suite with SYMPY_ASSUMPTIONS_BACKEND=satassume
+# (both assumption systems answered by satassume 5a7d3b8, no fallback).
+# Seeded from the 443 test ids that newly fail in the experiment's `both` run
+# (sympy 751a370, Python 3.14.8, -n 16), tags from its root-cause attribution
+# (shadow replay v2); then verified with this repository (see README.md).
+# An entry without "::" is a module whose collection fails: its collection
+# error is reported as a skip.
+# Tag counts: none 310, wrong 86, extra 24, unrecorded 7, agree 7, timeout 4, recursion 4, engine-exc 1
+#
+# Tags (the cause of the failure):
+#   none        the backend answers None where SymPy answers True/False
+#   wrong       the backend gives the opposite True/False answer
+#   extra       the backend decides a fact SymPy leaves None, changing results
+#   agree       every recorded answer agrees with SymPy (likely an answer
+#               cached by an earlier test in the same process: order dependent)
+#   unrecorded  no backend call recorded for the test itself (cached answers)
+#   engine-exc  an exception inside the backend
+#   timeout     the test exceeds the 60 s per-test limit (not run)
+#   recursion   RecursionError (not run: slow, and it has crashed xdist workers)
+#   assert      an assertion fails (cause not analysed further)
+#   exc-<name>  the exception <name> is raised (cause not analysed further)
+#
+# Format: TAG NODEID
+none       sympy/algebras/tests/test_quaternion.py::test_quaternion_functions
+none       sympy/assumptions/tests/test_matrices.py::test_diagonal
+none       sympy/assumptions/tests/test_matrices.py::test_invertible
+none       sympy/assumptions/tests/test_matrices.py::test_singular
+none       sympy/assumptions/tests/test_query.py::test_functions_in_assumptions
+none       sympy/assumptions/tests/test_query.py::test_relational
+none       sympy/assumptions/tests/test_refine.py::test_matrixelement
+none       sympy/assumptions/tests/test_wrapper.py::test_AssumptionsWrapper
+none       sympy/calculus/tests/test_accumulationbounds.py::test_AccumBounds
+none       sympy/calculus/tests/test_accumulationbounds.py::test_AccumBounds_pow
+none       sympy/calculus/tests/test_accumulationbounds.py::test_issue_18795
+none       sympy/calculus/tests/test_util.py::test_maximum
+none       sympy/calculus/tests/test_util.py::test_minimum
+none       sympy/codegen/tests/test_cfunctions.py::test_expm1
+none       sympy/codegen/tests/test_cfunctions.py::test_log1p
+none       sympy/codegen/tests/test_rewriting.py::test_matsolve
+timeout    sympy/combinatorics/tests/test_character_table.py::test_dixon_character_table
+none       sympy/concrete/tests/test_delta.py::test_deltaproduct_mul_add_x_kd_add_y_kd
+none       sympy/concrete/tests/test_delta.py::test_deltaproduct_mul_add_x_y_add_y_kd
+extra      sympy/concrete/tests/test_products.py::test_multiple_products
+none       sympy/concrete/tests/test_sums_products.py::test_Sum_doit
+none       sympy/concrete/tests/test_sums_products.py::test_has_reversed_limits
+none       sympy/concrete/tests/test_sums_products.py::test_is_zero
+recursion  sympy/concrete/tests/test_sums_products.py::test_issue_14112
+none       sympy/concrete/tests/test_sums_products.py::test_issue_2787
+recursion  sympy/concrete/tests/test_sums_products.py::test_summation_by_residues
+none       sympy/concrete/tests/test_sums_products.py::test_sumproducts_assumptions
+unrecorded sympy/core/tests/test_arit.py::test_Add_Mul_is_finite
+unrecorded sympy/core/tests/test_arit.py::test_Add_Mul_is_integer
+unrecorded sympy/core/tests/test_arit.py::test_Add_is_negative_positive
+none       sympy/core/tests/test_arit.py::test_Add_is_positive_2
+none       sympy/core/tests/test_arit.py::test_Mod
+none       sympy/core/tests/test_arit.py::test_Mod_is_integer
+none       sympy/core/tests/test_arit.py::test_Mod_is_nonposneg
+none       sympy/core/tests/test_arit.py::test_Mul_is_even_odd
+none       sympy/core/tests/test_arit.py::test_Mul_is_imaginary_real
+none       sympy/core/tests/test_arit.py::test_Mul_is_integer
+extra      sympy/core/tests/test_arit.py::test_Pow_is_finite
+none       sympy/core/tests/test_arit.py::test_Pow_is_integer
+extra      sympy/core/tests/test_arit.py::test_Pow_is_nonpositive_nonnegative
+agree      sympy/core/tests/test_arit.py::test_Pow_is_zero
+none       sympy/core/tests/test_arit.py::test_issue_8247_8354
+none       sympy/core/tests/test_arit.py::test_mul_zero_detection
+none       sympy/core/tests/test_arit.py::test_polar
+none       sympy/core/tests/test_assumptions.py::test_Add_is_imaginary
+none       sympy/core/tests/test_assumptions.py::test_Add_is_pos_neg
+none       sympy/core/tests/test_assumptions.py::test_Mul_is_algebraic
+none       sympy/core/tests/test_assumptions.py::test_Mul_is_prime_composite
+none       sympy/core/tests/test_assumptions.py::test_Pow_is_algebraic
+none       sympy/core/tests/test_assumptions.py::test_Pow_is_prime_composite
+none       sympy/core/tests/test_assumptions.py::test_issue_10302
+none       sympy/core/tests/test_assumptions.py::test_issue_4149
+none       sympy/core/tests/test_assumptions.py::test_issue_9115_9150
+none       sympy/core/tests/test_assumptions.py::test_issues_8632_8633_8638_8675_8992
+none       sympy/core/tests/test_assumptions.py::test_special_is_rational
+none       sympy/core/tests/test_basic.py::test_literal_evalf_is_number_is_zero_is_comparable
+none       sympy/core/tests/test_expr.py::test_as_leading_term
+unrecorded sympy/core/tests/test_expr.py::test_leadterm
+none       sympy/core/tests/test_exprtools.py::test_factor_nc
+none       sympy/core/tests/test_exprtools.py::test_monotonic_sign
+none       sympy/core/tests/test_function.py::test_function_non_commutative
+none       sympy/core/tests/test_function.py::test_issue_17382
+none       sympy/core/tests/test_function.py::test_nfloat
+none       sympy/core/tests/test_noncommutative.py::test_adjoint
+none       sympy/core/tests/test_noncommutative.py::test_conjugate
+none       sympy/core/tests/test_noncommutative.py::test_transpose
+none       sympy/core/tests/test_numbers.py::test_Infinity_2
+none       sympy/core/tests/test_numbers.py::test_powers_Integer
+extra      sympy/core/tests/test_power.py::test_issue_14815
+none       sympy/core/tests/test_power.py::test_issue_17450
+none       sympy/core/tests/test_power.py::test_issue_18509
+none       sympy/core/tests/test_power.py::test_issue_4362
+none       sympy/core/tests/test_power.py::test_issue_7638
+none       sympy/core/tests/test_relational.py::test_is_eq
+none       sympy/core/tests/test_relational.py::test_is_ge_le
+none       sympy/core/tests/test_relational.py::test_issues_13081_12583_12534
+none       sympy/core/tests/test_subs.py::test_RootOf_issue_10092
+none       sympy/functions/combinatorial/tests/test_comb_factorials.py::test_binomial
+none       sympy/functions/combinatorial/tests/test_comb_factorials.py::test_factorial
+none       sympy/functions/combinatorial/tests/test_comb_factorials.py::test_factorial2
+none       sympy/functions/combinatorial/tests/test_comb_factorials.py::test_factorial_Mod
+none       sympy/functions/combinatorial/tests/test_comb_factorials.py::test_ff_eval_apply
+none       sympy/functions/combinatorial/tests/test_comb_factorials.py::test_rf_eval_apply
+none       sympy/functions/combinatorial/tests/test_comb_factorials.py::test_subfactorial
+none       sympy/functions/combinatorial/tests/test_comb_numbers.py::test_andre
+none       sympy/functions/combinatorial/tests/test_comb_numbers.py::test_catalan
+none       sympy/functions/combinatorial/tests/test_comb_numbers.py::test_fibonacci
+none       sympy/functions/combinatorial/tests/test_comb_numbers.py::test_genocchi
+none       sympy/functions/combinatorial/tests/test_comb_numbers.py::test_harmonic
+none       sympy/functions/combinatorial/tests/test_comb_numbers.py::test_partition
+none       sympy/functions/elementary/tests/test_complexes.py::test_Abs
+none       sympy/functions/elementary/tests/test_complexes.py::test_conjugate
+none       sympy/functions/elementary/tests/test_complexes.py::test_im
+none       sympy/functions/elementary/tests/test_complexes.py::test_polarify
+none       sympy/functions/elementary/tests/test_complexes.py::test_principal_branch
+none       sympy/functions/elementary/tests/test_complexes.py::test_re
+none       sympy/functions/elementary/tests/test_complexes.py::test_sign
+none       sympy/functions/elementary/tests/test_complexes.py::test_zero_assumptions
+none       sympy/functions/elementary/tests/test_exponential.py::test_exp_assumptions
+none       sympy/functions/elementary/tests/test_exponential.py::test_issue_9116
+none       sympy/functions/elementary/tests/test_exponential.py::test_lambertw
+none       sympy/functions/elementary/tests/test_exponential.py::test_log_exact
+none       sympy/functions/elementary/tests/test_exponential.py::test_log_expand_complex
+none       sympy/functions/elementary/tests/test_exponential.py::test_log_simplify
+none       sympy/functions/elementary/tests/test_exponential.py::test_polar
+none       sympy/functions/elementary/tests/test_hyperbolic.py::test_acosh
+none       sympy/functions/elementary/tests/test_hyperbolic.py::test_acoth
+none       sympy/functions/elementary/tests/test_hyperbolic.py::test_acsch
+none       sympy/functions/elementary/tests/test_hyperbolic.py::test_acsch_leading_term
+none       sympy/functions/elementary/tests/test_hyperbolic.py::test_acsch_nseries
+none       sympy/functions/elementary/tests/test_hyperbolic.py::test_asech
+none       sympy/functions/elementary/tests/test_hyperbolic.py::test_asinh
+none       sympy/functions/elementary/tests/test_hyperbolic.py::test_asinh_leading_term
+none       sympy/functions/elementary/tests/test_hyperbolic.py::test_asinh_nseries
+none       sympy/functions/elementary/tests/test_hyperbolic.py::test_atanh
+none       sympy/functions/elementary/tests/test_hyperbolic.py::test_cosh
+none       sympy/functions/elementary/tests/test_hyperbolic.py::test_cosh_nonnegative
+none       sympy/functions/elementary/tests/test_hyperbolic.py::test_cosh_positive
+none       sympy/functions/elementary/tests/test_hyperbolic.py::test_coth
+none       sympy/functions/elementary/tests/test_hyperbolic.py::test_csch
+none       sympy/functions/elementary/tests/test_hyperbolic.py::test_sech
+none       sympy/functions/elementary/tests/test_hyperbolic.py::test_sign_assumptions
+none       sympy/functions/elementary/tests/test_hyperbolic.py::test_sinh
+none       sympy/functions/elementary/tests/test_hyperbolic.py::test_tanh
+none       sympy/functions/elementary/tests/test_integers.py::test_ceiling
+none       sympy/functions/elementary/tests/test_integers.py::test_frac
+none       sympy/functions/elementary/tests/test_miscellaneous.py::test_Max
+none       sympy/functions/elementary/tests/test_miscellaneous.py::test_Min
+none       sympy/functions/elementary/tests/test_miscellaneous.py::test_minmax_assumptions
+none       sympy/functions/elementary/tests/test_piecewise.py::test_issue_10258
+none       sympy/functions/elementary/tests/test_piecewise.py::test_piecewise_complex
+none       sympy/functions/elementary/tests/test_trigonometric.py::test_asec_is_real
+none       sympy/functions/elementary/tests/test_trigonometric.py::test_asec_leading_term
+none       sympy/functions/elementary/tests/test_trigonometric.py::test_asin_leading_term
+none       sympy/functions/elementary/tests/test_trigonometric.py::test_cos
+none       sympy/functions/elementary/tests/test_trigonometric.py::test_cot
+none       sympy/functions/elementary/tests/test_trigonometric.py::test_csc
+none       sympy/functions/elementary/tests/test_trigonometric.py::test_issue_9157
+none       sympy/functions/elementary/tests/test_trigonometric.py::test_real_assumptions
+none       sympy/functions/elementary/tests/test_trigonometric.py::test_sec
+none       sympy/functions/elementary/tests/test_trigonometric.py::test_sin
+none       sympy/functions/elementary/tests/test_trigonometric.py::test_sinc
+none       sympy/functions/elementary/tests/test_trigonometric.py::test_tan
+none       sympy/functions/special/tests/test_bessel.py::test_airy_base
+none       sympy/functions/special/tests/test_bessel.py::test_expand
+none       sympy/functions/special/tests/test_beta_functions.py::test_beta
+none       sympy/functions/special/tests/test_beta_functions.py::test_betainc
+none       sympy/functions/special/tests/test_beta_functions.py::test_betainc_regularized
+none       sympy/functions/special/tests/test_error_functions.py::test_erf
+none       sympy/functions/special/tests/test_error_functions.py::test_erf2
+none       sympy/functions/special/tests/test_error_functions.py::test_erfc
+none       sympy/functions/special/tests/test_error_functions.py::test_erfcinv
+none       sympy/functions/special/tests/test_error_functions.py::test_erfi
+none       sympy/functions/special/tests/test_error_functions.py::test_expint
+none       sympy/functions/special/tests/test_error_functions.py::test_fresnel
+none       sympy/functions/special/tests/test_error_functions.py::test_owent_is_extended_real
+none       sympy/functions/special/tests/test_error_functions.py::test_owent_is_zero
+none       sympy/functions/special/tests/test_error_functions.py::test_owent_sign_and_finite
+none       sympy/functions/special/tests/test_gamma_functions.py::test_gamma
+none       sympy/functions/special/tests/test_gamma_functions.py::test_issue_8524
+none       sympy/functions/special/tests/test_gamma_functions.py::test_issue_8657
+none       sympy/functions/special/tests/test_gamma_functions.py::test_loggamma
+none       sympy/functions/special/tests/test_gamma_functions.py::test_multigamma
+none       sympy/functions/special/tests/test_gamma_functions.py::test_polygamma
+none       sympy/functions/special/tests/test_singularity_functions.py::test_eval
+none       sympy/functions/special/tests/test_spec_polynomials.py::test_legendre
+none       sympy/functions/special/tests/test_zeta_functions.py::test_issue_10475
+none       sympy/geometry/tests/test_ellipse.py::test_construction
+none       sympy/geometry/tests/test_entity.py::test_entity
+none       sympy/integrals/tests/test_integrals.py::test_doit_integrals
+none       sympy/integrals/tests/test_integrals.py::test_evalf_issue_939
+none       sympy/integrals/tests/test_integrals.py::test_is_zero
+none       sympy/integrals/tests/test_integrals.py::test_issue_22863
+none       sympy/integrals/tests/test_integrals.py::test_issue_23566
+none       sympy/integrals/tests/test_integrals.py::test_issue_8368i
+none       sympy/integrals/tests/test_manual.py::test_issue_23566
+none       sympy/integrals/tests/test_meijerint.py::test_inversion_exp_real_nonreal_shift
+none       sympy/integrals/tests/test_meijerint.py::test_messy
+none       sympy/integrals/tests/test_quadrature.py::test_gen_laguerre
+unrecorded sympy/integrals/tests/test_quadrature.py::test_gen_laguerre_precise
+none       sympy/integrals/tests/test_quadrature.py::test_hermite
+none       sympy/integrals/tests/test_quadrature.py::test_jacobi
+unrecorded sympy/integrals/tests/test_quadrature.py::test_jacobi_precise
+none       sympy/integrals/tests/test_quadrature.py::test_laguerre
+unrecorded sympy/integrals/tests/test_quadrature.py::test_laguerre_precise
+none       sympy/integrals/tests/test_quadrature.py::test_legendre
+none       sympy/matrices/expressions/tests/test_blockmatrix.py::test_BlockMatrix_2x2_inverse_numeric
+none       sympy/matrices/expressions/tests/test_blockmatrix.py::test_BlockMatrix_2x2_inverse_symbolic
+none       sympy/matrices/expressions/tests/test_blockmatrix.py::test_BlockMatrix_Determinant
+none       sympy/matrices/expressions/tests/test_determinant.py::test_refine
+none       sympy/matrices/expressions/tests/test_diagonal.py::test_DiagMatrix
+none       sympy/matrices/expressions/tests/test_diagonal.py::test_DiagonalMatrix
+none       sympy/matrices/expressions/tests/test_factorizations.py::test_LU
+none       sympy/matrices/expressions/tests/test_factorizations.py::test_QR
+none       sympy/matrices/expressions/tests/test_factorizations.py::test_svd
+none       sympy/matrices/expressions/tests/test_fourier.py::test_dft
+none       sympy/matrices/expressions/tests/test_indexing.py::test_block_index_symbolic_nonzero
+none       sympy/matrices/expressions/tests/test_inverse.py::test_refine
+wrong      sympy/matrices/expressions/tests/test_matexpr.py::test_exp
+none       sympy/matrices/expressions/tests/test_matmul.py::test_refine
+none       sympy/matrices/expressions/tests/test_transpose.py::test_refine
+none       sympy/matrices/expressions/tests/test_transpose.py::test_transpose1x1
+none       sympy/matrices/tests/test_eigen.py::test_definite
+timeout    sympy/matrices/tests/test_eigen.py::test_issue_20275
+none       sympy/matrices/tests/test_eigen.py::test_jordan_form
+none       sympy/matrices/tests/test_matrices.py::test_hermitian
+none       sympy/matrices/tests/test_matrices.py::test_matrix_norm
+none       sympy/matrices/tests/test_matrixbase.py::test_matrix_norm
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthActiveDeGroote2016::test_print_code[C11CodePrinter-(0.81399999999999995*exp(-1.0/2.0*pow(l_M_tilde - 1.0600000000000001, 2)/pow(0.063299999999999995*l_M_tilde + 0.16200000000000001, 2)) + 0.433*exp(-1.0/2.0*pow(l_M_tilde - 0.71699999999999997, 2)/pow(0.20000000000000001*l_M_tilde - 0.029899999999999999, 2)) + 0.10000000000000001*exp(-3.9899134986753491*pow(l_M_tilde - 1.0, 2)))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthActiveDeGroote2016::test_print_code[C89CodePrinter-(0.81399999999999995*exp(-1.0/2.0*pow(l_M_tilde - 1.0600000000000001, 2)/pow(0.063299999999999995*l_M_tilde + 0.16200000000000001, 2)) + 0.433*exp(-1.0/2.0*pow(l_M_tilde - 0.71699999999999997, 2)/pow(0.20000000000000001*l_M_tilde - 0.029899999999999999, 2)) + 0.10000000000000001*exp(-3.9899134986753491*pow(l_M_tilde - 1.0, 2)))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthActiveDeGroote2016::test_print_code[C99CodePrinter-(0.81399999999999995*exp(-1.0/2.0*pow(l_M_tilde - 1.0600000000000001, 2)/pow(0.063299999999999995*l_M_tilde + 0.16200000000000001, 2)) + 0.433*exp(-1.0/2.0*pow(l_M_tilde - 0.71699999999999997, 2)/pow(0.20000000000000001*l_M_tilde - 0.029899999999999999, 2)) + 0.10000000000000001*exp(-3.9899134986753491*pow(l_M_tilde - 1.0, 2)))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthActiveDeGroote2016::test_print_code[CXX11CodePrinter-(0.81399999999999995*std::exp(-1.0/2.0*std::pow(l_M_tilde - 1.0600000000000001, 2)/std::pow(0.063299999999999995*l_M_tilde + 0.16200000000000001, 2)) + 0.433*std::exp(-1.0/2.0*std::pow(l_M_tilde - 0.71699999999999997, 2)/std::pow(0.20000000000000001*l_M_tilde - 0.029899999999999999, 2)) + 0.10000000000000001*std::exp(-3.9899134986753491*std::pow(l_M_tilde - 1.0, 2)))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthActiveDeGroote2016::test_print_code[CXX17CodePrinter-(0.81399999999999995*std::exp(-1.0/2.0*std::pow(l_M_tilde - 1.0600000000000001, 2)/std::pow(0.063299999999999995*l_M_tilde + 0.16200000000000001, 2)) + 0.433*std::exp(-1.0/2.0*std::pow(l_M_tilde - 0.71699999999999997, 2)/std::pow(0.20000000000000001*l_M_tilde - 0.029899999999999999, 2)) + 0.10000000000000001*std::exp(-3.9899134986753491*std::pow(l_M_tilde - 1.0, 2)))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthActiveDeGroote2016::test_print_code[CXX98CodePrinter-(0.81399999999999995*exp(-1.0/2.0*std::pow(l_M_tilde - 1.0600000000000001, 2)/std::pow(0.063299999999999995*l_M_tilde + 0.16200000000000001, 2)) + 0.433*exp(-1.0/2.0*std::pow(l_M_tilde - 0.71699999999999997, 2)/std::pow(0.20000000000000001*l_M_tilde - 0.029899999999999999, 2)) + 0.10000000000000001*exp(-3.9899134986753491*std::pow(l_M_tilde - 1.0, 2)))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthActiveDeGroote2016::test_print_code[CuPyPrinter-(0.814*cupy.exp(-1/2*(l_M_tilde - 1.06)**2/(0.0633*l_M_tilde + 0.162)**2) + 0.433*cupy.exp(-1/2*(l_M_tilde - 0.717)**2/(0.2*l_M_tilde - 0.0299)**2) + 0.1*cupy.exp(-3.98991349867535*(l_M_tilde - 1.0)**2))]
+agree      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthActiveDeGroote2016::test_print_code[FCodePrinter-      (0.814d0*exp(-0.5d0*(l_M_tilde - 1.06d0)**2/(\n     @ 0.063299999999999995d0*l_M_tilde + 0.16200000000000001d0)**2) +\n     @ 0.433d0*exp(-0.5d0*(l_M_tilde - 0.717d0)**2/(\n     @ 0.20000000000000001d0*l_M_tilde - 0.029899999999999999d0)**2) +\n     @ 0.1d0*exp(-3.9899134986753491d0*(l_M_tilde - 1.0d0)**2))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthActiveDeGroote2016::test_print_code[JaxPrinter-(0.814*jax.numpy.exp(-1/2*(l_M_tilde - 1.06)**2/(0.0633*l_M_tilde + 0.162)**2) + 0.433*jax.numpy.exp(-1/2*(l_M_tilde - 0.717)**2/(0.2*l_M_tilde - 0.0299)**2) + 0.1*jax.numpy.exp(-3.98991349867535*(l_M_tilde - 1.0)**2))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthActiveDeGroote2016::test_print_code[LambdaPrinter-(0.814*math.exp(-1/2*(l_M_tilde - 1.06)**2/(0.0633*l_M_tilde + 0.162)**2) + 0.433*math.exp(-1/2*(l_M_tilde - 0.717)**2/(0.2*l_M_tilde - 0.0299)**2) + 0.1*math.exp(-3.98991349867535*(l_M_tilde - 1.0)**2))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthActiveDeGroote2016::test_print_code[MpmathPrinter-(mpmath.mpf((0, 7331860193359167, -53, 53))*mpmath.exp(-mpmath.mpf(1)/mpmath.mpf(2)*(l_M_tilde + mpmath.mpf((1, 2386907802506363, -51, 52)))**2/(mpmath.mpf((0, 2280622851300419, -55, 52))*l_M_tilde + mpmath.mpf((0, 5836665117072163, -55, 53)))**2) + mpmath.mpf((0, 7800234554605699, -54, 53))*mpmath.exp(-mpmath.mpf(1)/mpmath.mpf(2)*(l_M_tilde + mpmath.mpf((1, 6458161865649291, -53, 53)))**2/(mpmath.mpf((0, 3602879701896397, -54, 52))*l_M_tilde + mpmath.mpf((1, 8618088246936181, -58, 53)))**2) + mpmath.mpf((0, 3602879701896397, -55, 52))*mpmath.exp(-mpmath.mpf((0, 8984486472937407, -51, 53))*(l_M_tilde + mpmath.mpf((1, 1, 0, 1)))**2))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthActiveDeGroote2016::test_print_code[NumPyPrinter-(0.814*numpy.exp(-1/2*(l_M_tilde - 1.06)**2/(0.0633*l_M_tilde + 0.162)**2) + 0.433*numpy.exp(-1/2*(l_M_tilde - 0.717)**2/(0.2*l_M_tilde - 0.0299)**2) + 0.1*numpy.exp(-3.98991349867535*(l_M_tilde - 1.0)**2))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthActiveDeGroote2016::test_print_code[OctaveCodePrinter-(0.814*exp(-(l_M_tilde - 1.06).^2./(2*(0.0633*l_M_tilde + 0.162).^2)) + 0.433*exp(-(l_M_tilde - 0.717).^2./(2*(0.2*l_M_tilde - 0.0299).^2)) + 0.1*exp(-3.98991349867535*(l_M_tilde - 1.0).^2))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthActiveDeGroote2016::test_print_code[PythonCodePrinter-(0.814*math.exp(-1/2*(l_M_tilde - 1.06)**2/(0.0633*l_M_tilde + 0.162)**2) + 0.433*math.exp(-1/2*(l_M_tilde - 0.717)**2/(0.2*l_M_tilde - 0.0299)**2) + 0.1*math.exp(-3.98991349867535*(l_M_tilde - 1.0)**2))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthActiveDeGroote2016::test_print_code[SciPyPrinter-(0.814*numpy.exp(-1/2*(l_M_tilde - 1.06)**2/(0.0633*l_M_tilde + 0.162)**2) + 0.433*numpy.exp(-1/2*(l_M_tilde - 0.717)**2/(0.2*l_M_tilde - 0.0299)**2) + 0.1*numpy.exp(-3.98991349867535*(l_M_tilde - 1.0)**2))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthPassiveDeGroote2016::test_print_code[C11CodePrinter-(0.01865736036377405*(-1 + exp(6.666666666666667*(l_M_tilde - 1))))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthPassiveDeGroote2016::test_print_code[C89CodePrinter-(0.01865736036377405*(-1 + exp(6.666666666666667*(l_M_tilde - 1))))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthPassiveDeGroote2016::test_print_code[C99CodePrinter-(0.01865736036377405*(-1 + exp(6.666666666666667*(l_M_tilde - 1))))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthPassiveDeGroote2016::test_print_code[CXX11CodePrinter-(0.01865736036377405*(-1 + std::exp(6.666666666666667*(l_M_tilde - 1))))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthPassiveDeGroote2016::test_print_code[CXX17CodePrinter-(0.01865736036377405*(-1 + std::exp(6.666666666666667*(l_M_tilde - 1))))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthPassiveDeGroote2016::test_print_code[CXX98CodePrinter-(0.01865736036377405*(-1 + exp(6.666666666666667*(l_M_tilde - 1))))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthPassiveDeGroote2016::test_print_code[CuPyPrinter-(0.0186573603637741*(-1 + cupy.exp(6.66666666666667*(l_M_tilde - 1))))]
+agree      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthPassiveDeGroote2016::test_print_code[FCodePrinter-      (0.0186573603637741d0*(-1 + exp(6.666666666666667d0*(l_M_tilde - 1\n     @ ))))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthPassiveDeGroote2016::test_print_code[JaxPrinter-(0.0186573603637741*(-1 + jax.numpy.exp(6.66666666666667*(l_M_tilde - 1))))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthPassiveDeGroote2016::test_print_code[LambdaPrinter-(0.0186573603637741*(-1 + math.exp(6.66666666666667*(l_M_tilde - 1))))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthPassiveDeGroote2016::test_print_code[MpmathPrinter-(mpmath.mpf((0, 672202249456079, -55, 50))*(-1 + mpmath.exp(mpmath.mpf((0, 7505999378950827, -50, 53))*(l_M_tilde - 1))))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthPassiveDeGroote2016::test_print_code[NumPyPrinter-(0.0186573603637741*(-1 + numpy.exp(6.66666666666667*(l_M_tilde - 1))))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthPassiveDeGroote2016::test_print_code[OctaveCodePrinter-(0.0186573603637741*(-1 + exp(6.66666666666667*(l_M_tilde - 1))))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthPassiveDeGroote2016::test_print_code[PythonCodePrinter-(0.0186573603637741*(-1 + math.exp(6.66666666666667*(l_M_tilde - 1))))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthPassiveDeGroote2016::test_print_code[SciPyPrinter-(0.0186573603637741*(-1 + numpy.exp(6.66666666666667*(l_M_tilde - 1))))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthPassiveInverseDeGroote2016::test_print_code[C11CodePrinter-(1 + 0.14999999999999999*log(1 + 53.598150033144236*fl_M_pas))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthPassiveInverseDeGroote2016::test_print_code[C89CodePrinter-(1 + 0.14999999999999999*log(1 + 53.598150033144236*fl_M_pas))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthPassiveInverseDeGroote2016::test_print_code[C99CodePrinter-(1 + 0.14999999999999999*log(1 + 53.598150033144236*fl_M_pas))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthPassiveInverseDeGroote2016::test_print_code[CXX11CodePrinter-(1 + 0.14999999999999999*std::log(1 + 53.598150033144236*fl_M_pas))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthPassiveInverseDeGroote2016::test_print_code[CXX17CodePrinter-(1 + 0.14999999999999999*std::log(1 + 53.598150033144236*fl_M_pas))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthPassiveInverseDeGroote2016::test_print_code[CXX98CodePrinter-(1 + 0.14999999999999999*log(1 + 53.598150033144236*fl_M_pas))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthPassiveInverseDeGroote2016::test_print_code[CuPyPrinter-(1 + 0.15*cupy.log(1 + 53.5981500331442*fl_M_pas))]
+agree      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthPassiveInverseDeGroote2016::test_print_code[FCodePrinter-      (1 + 0.15d0*log(1.0d0 + 53.5981500331442d0*fl_M_pas))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthPassiveInverseDeGroote2016::test_print_code[JaxPrinter-(1 + 0.15*jax.numpy.log(1 + 53.5981500331442*fl_M_pas))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthPassiveInverseDeGroote2016::test_print_code[LambdaPrinter-(1 + 0.15*math.log(1 + 53.5981500331442*fl_M_pas))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthPassiveInverseDeGroote2016::test_print_code[MpmathPrinter-(1 + mpmath.mpf((0, 5404319552844595, -55, 53))*mpmath.log(1 + mpmath.mpf((0, 942908627019595, -44, 50))*fl_M_pas))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthPassiveInverseDeGroote2016::test_print_code[NumPyPrinter-(1 + 0.15*numpy.log(1 + 53.5981500331442*fl_M_pas))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthPassiveInverseDeGroote2016::test_print_code[OctaveCodePrinter-(1 + 0.15*log(1 + 53.5981500331442*fl_M_pas))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthPassiveInverseDeGroote2016::test_print_code[PythonCodePrinter-(1 + 0.15*math.log(1 + 53.5981500331442*fl_M_pas))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthPassiveInverseDeGroote2016::test_print_code[SciPyPrinter-(1 + 0.15*numpy.log(1 + 53.5981500331442*fl_M_pas))]
+none       sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceVelocityDeGroote2016::test_derivative_print_code
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceVelocityDeGroote2016::test_print_code[C11CodePrinter-(0.88600000000000001 - 0.318*log(-8.1489999999999991*v_M_tilde - 0.374 + sqrt(1 + pow(-8.1489999999999991*v_M_tilde - 0.374, 2))))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceVelocityDeGroote2016::test_print_code[C89CodePrinter-(0.88600000000000001 - 0.318*log(-8.1489999999999991*v_M_tilde - 0.374 + sqrt(1 + pow(-8.1489999999999991*v_M_tilde - 0.374, 2))))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceVelocityDeGroote2016::test_print_code[C99CodePrinter-(0.88600000000000001 - 0.318*log(-8.1489999999999991*v_M_tilde - 0.374 + sqrt(1 + pow(-8.1489999999999991*v_M_tilde - 0.374, 2))))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceVelocityDeGroote2016::test_print_code[CXX11CodePrinter-(0.88600000000000001 - 0.318*std::log(-8.1489999999999991*v_M_tilde - 0.374 + std::sqrt(1 + std::pow(-8.1489999999999991*v_M_tilde - 0.374, 2))))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceVelocityDeGroote2016::test_print_code[CXX17CodePrinter-(0.88600000000000001 - 0.318*std::log(-8.1489999999999991*v_M_tilde - 0.374 + std::sqrt(1 + std::pow(-8.1489999999999991*v_M_tilde - 0.374, 2))))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceVelocityDeGroote2016::test_print_code[CXX98CodePrinter-(0.88600000000000001 - 0.318*log(-8.1489999999999991*v_M_tilde - 0.374 + std::sqrt(1 + std::pow(-8.1489999999999991*v_M_tilde - 0.374, 2))))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceVelocityDeGroote2016::test_print_code[CuPyPrinter-(0.886 - 0.318*cupy.log(-8.149*v_M_tilde - 0.374 + cupy.sqrt(1 + (-8.149*v_M_tilde - 0.374)**2)))]
+none       sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceVelocityDeGroote2016::test_print_code[FCodePrinter-      (0.886d0 - 0.318d0*log(-8.1489999999999991d0*v_M_tilde - 0.374d0 +\n     @ sqrt(1.0d0 + (-8.149d0*v_M_tilde - 0.374d0)**2)))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceVelocityDeGroote2016::test_print_code[JaxPrinter-(0.886 - 0.318*jax.numpy.log(-8.149*v_M_tilde - 0.374 + jax.numpy.sqrt(1 + (-8.149*v_M_tilde - 0.374)**2)))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceVelocityDeGroote2016::test_print_code[LambdaPrinter-(0.886 - 0.318*math.log(-8.149*v_M_tilde - 0.374 + sqrt(1 + (-8.149*v_M_tilde - 0.374)**2)))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceVelocityDeGroote2016::test_print_code[MpmathPrinter-(mpmath.mpf((0, 7980378539700519, -53, 53)) - mpmath.mpf((0, 5728578726015271, -54, 53))*mpmath.log(-mpmath.mpf((0, 4587479170430271, -49, 53))*v_M_tilde + mpmath.mpf((1, 3368692521273131, -53, 52)) + mpmath.sqrt(1 + (-mpmath.mpf((0, 4587479170430271, -49, 53))*v_M_tilde + mpmath.mpf((1, 3368692521273131, -53, 52)))**2)))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceVelocityDeGroote2016::test_print_code[NumPyPrinter-(0.886 - 0.318*numpy.log(-8.149*v_M_tilde - 0.374 + numpy.sqrt(1 + (-8.149*v_M_tilde - 0.374)**2)))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceVelocityDeGroote2016::test_print_code[OctaveCodePrinter-(0.886 - 0.318*log(-8.149*v_M_tilde - 0.374 + sqrt(1 + (-8.149*v_M_tilde - 0.374).^2)))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceVelocityDeGroote2016::test_print_code[PythonCodePrinter-(0.886 - 0.318*math.log(-8.149*v_M_tilde - 0.374 + math.sqrt(1 + (-8.149*v_M_tilde - 0.374)**2)))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceVelocityDeGroote2016::test_print_code[SciPyPrinter-(0.886 - 0.318*numpy.log(-8.149*v_M_tilde - 0.374 + numpy.sqrt(1 + (-8.149*v_M_tilde - 0.374)**2)))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceVelocityInverseDeGroote2016::test_print_code[C11CodePrinter-(-0.12271444348999878*(0.374 - sinh(3.1446540880503142*(fv_M - 0.88600000000000001))))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceVelocityInverseDeGroote2016::test_print_code[C89CodePrinter-(-0.12271444348999878*(0.374 - sinh(3.1446540880503142*(fv_M - 0.88600000000000001))))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceVelocityInverseDeGroote2016::test_print_code[C99CodePrinter-(-0.12271444348999878*(0.374 - sinh(3.1446540880503142*(fv_M - 0.88600000000000001))))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceVelocityInverseDeGroote2016::test_print_code[CXX11CodePrinter-(-0.12271444348999878*(0.374 - std::sinh(3.1446540880503142*(fv_M - 0.88600000000000001))))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceVelocityInverseDeGroote2016::test_print_code[CXX17CodePrinter-(-0.12271444348999878*(0.374 - std::sinh(3.1446540880503142*(fv_M - 0.88600000000000001))))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceVelocityInverseDeGroote2016::test_print_code[CXX98CodePrinter-(-0.12271444348999878*(0.374 - sinh(3.1446540880503142*(fv_M - 0.88600000000000001))))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceVelocityInverseDeGroote2016::test_print_code[CuPyPrinter-(-0.122714443489999*(0.374 - cupy.sinh(3.14465408805031*(fv_M - 0.886))))]
+agree      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceVelocityInverseDeGroote2016::test_print_code[FCodePrinter-      (-0.122714443489999d0*(0.374d0 - sinh(3.1446540880503142d0*(fv_M -\n     @ 0.886d0))))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceVelocityInverseDeGroote2016::test_print_code[JaxPrinter-(-0.122714443489999*(0.374 - jax.numpy.sinh(3.14465408805031*(fv_M - 0.886))))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceVelocityInverseDeGroote2016::test_print_code[LambdaPrinter-(-0.122714443489999*(0.374 - math.sinh(3.14465408805031*(fv_M - 0.886))))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceVelocityInverseDeGroote2016::test_print_code[MpmathPrinter-(-mpmath.mpf((0, 8842507551592581, -56, 53))*(mpmath.mpf((0, 3368692521273131, -53, 52)) - mpmath.sinh(mpmath.mpf((0, 7081131489576251, -51, 53))*(fv_M + mpmath.mpf((1, 7980378539700519, -53, 53))))))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceVelocityInverseDeGroote2016::test_print_code[NumPyPrinter-(-0.122714443489999*(0.374 - numpy.sinh(3.14465408805031*(fv_M - 0.886))))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceVelocityInverseDeGroote2016::test_print_code[OctaveCodePrinter-(-0.122714443489999*(0.374 - sinh(3.14465408805031*(fv_M - 0.886))))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceVelocityInverseDeGroote2016::test_print_code[PythonCodePrinter-(-0.122714443489999*(0.374 - math.sinh(3.14465408805031*(fv_M - 0.886))))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceVelocityInverseDeGroote2016::test_print_code[SciPyPrinter-(-0.122714443489999*(0.374 - numpy.sinh(3.14465408805031*(fv_M - 0.886))))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestTendonForceLengthDeGroote2016::test_print_code[C11CodePrinter-(-0.25 + 0.20000000000000001*exp(33.93669377311689*(l_T_tilde - 0.995)))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestTendonForceLengthDeGroote2016::test_print_code[C89CodePrinter-(-0.25 + 0.20000000000000001*exp(33.93669377311689*(l_T_tilde - 0.995)))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestTendonForceLengthDeGroote2016::test_print_code[C99CodePrinter-(-0.25 + 0.20000000000000001*exp(33.93669377311689*(l_T_tilde - 0.995)))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestTendonForceLengthDeGroote2016::test_print_code[CXX11CodePrinter-(-0.25 + 0.20000000000000001*std::exp(33.93669377311689*(l_T_tilde - 0.995)))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestTendonForceLengthDeGroote2016::test_print_code[CXX17CodePrinter-(-0.25 + 0.20000000000000001*std::exp(33.93669377311689*(l_T_tilde - 0.995)))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestTendonForceLengthDeGroote2016::test_print_code[CXX98CodePrinter-(-0.25 + 0.20000000000000001*exp(33.93669377311689*(l_T_tilde - 0.995)))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestTendonForceLengthDeGroote2016::test_print_code[CuPyPrinter-(-0.25 + 0.2*cupy.exp(33.93669377311689*(l_T_tilde - 0.995)))]
+agree      sympy/physics/biomechanics/tests/test_curve.py::TestTendonForceLengthDeGroote2016::test_print_code[FCodePrinter-      (-0.25d0 + 0.2d0*exp(33.93669377311689d0*(l_T_tilde - 0.995d0)))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestTendonForceLengthDeGroote2016::test_print_code[JaxPrinter-(-0.25 + 0.2*jax.numpy.exp(33.93669377311689*(l_T_tilde - 0.995)))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestTendonForceLengthDeGroote2016::test_print_code[LambdaPrinter-(-0.25 + 0.2*math.exp(33.93669377311689*(l_T_tilde - 0.995)))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestTendonForceLengthDeGroote2016::test_print_code[MpmathPrinter-(mpmath.mpf((1, 1, -2, 1)) + mpmath.mpf((0, 3602879701896397, -54, 52))*mpmath.exp(mpmath.mpf((0, 9552330089424741, -48, 54))*(l_T_tilde + mpmath.mpf((1, 8962163258467287, -53, 53)))))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestTendonForceLengthDeGroote2016::test_print_code[NumPyPrinter-(-0.25 + 0.2*numpy.exp(33.93669377311689*(l_T_tilde - 0.995)))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestTendonForceLengthDeGroote2016::test_print_code[OctaveCodePrinter-(-0.25 + 0.2*exp(33.93669377311689*(l_T_tilde - 0.995)))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestTendonForceLengthDeGroote2016::test_print_code[PythonCodePrinter-(-0.25 + 0.2*math.exp(33.93669377311689*(l_T_tilde - 0.995)))]
+wrong      sympy/physics/biomechanics/tests/test_curve.py::TestTendonForceLengthDeGroote2016::test_print_code[SciPyPrinter-(-0.25 + 0.2*numpy.exp(33.93669377311689*(l_T_tilde - 0.995)))]
+extra      sympy/physics/biomechanics/tests/test_curve.py::TestTendonForceLengthInverseDeGroote2016::test_print_code[C11CodePrinter-(0.995 + 0.029466630034306838*log(5.0*fl_T + 1.25))]
+extra      sympy/physics/biomechanics/tests/test_curve.py::TestTendonForceLengthInverseDeGroote2016::test_print_code[C89CodePrinter-(0.995 + 0.029466630034306838*log(5.0*fl_T + 1.25))]
+extra      sympy/physics/biomechanics/tests/test_curve.py::TestTendonForceLengthInverseDeGroote2016::test_print_code[C99CodePrinter-(0.995 + 0.029466630034306838*log(5.0*fl_T + 1.25))]
+extra      sympy/physics/biomechanics/tests/test_curve.py::TestTendonForceLengthInverseDeGroote2016::test_print_code[CXX11CodePrinter-(0.995 + 0.029466630034306838*std::log(5.0*fl_T + 1.25))]
+extra      sympy/physics/biomechanics/tests/test_curve.py::TestTendonForceLengthInverseDeGroote2016::test_print_code[CXX17CodePrinter-(0.995 + 0.029466630034306838*std::log(5.0*fl_T + 1.25))]
+extra      sympy/physics/biomechanics/tests/test_curve.py::TestTendonForceLengthInverseDeGroote2016::test_print_code[CXX98CodePrinter-(0.995 + 0.029466630034306838*log(5.0*fl_T + 1.25))]
+extra      sympy/physics/biomechanics/tests/test_curve.py::TestTendonForceLengthInverseDeGroote2016::test_print_code[CuPyPrinter-(0.995 + 0.02946663003430684*cupy.log(5.0*fl_T + 1.25))]
+extra      sympy/physics/biomechanics/tests/test_curve.py::TestTendonForceLengthInverseDeGroote2016::test_print_code[FCodePrinter-      (0.995d0 + 0.02946663003430684d0*log(5.0d0*fl_T + 1.25d0))]
+extra      sympy/physics/biomechanics/tests/test_curve.py::TestTendonForceLengthInverseDeGroote2016::test_print_code[JaxPrinter-(0.995 + 0.02946663003430684*jax.numpy.log(5.0*fl_T + 1.25))]
+extra      sympy/physics/biomechanics/tests/test_curve.py::TestTendonForceLengthInverseDeGroote2016::test_print_code[LambdaPrinter-(0.995 + 0.02946663003430684*math.log(5.0*fl_T + 1.25))]
+extra      sympy/physics/biomechanics/tests/test_curve.py::TestTendonForceLengthInverseDeGroote2016::test_print_code[MpmathPrinter-(mpmath.mpf((0, 8962163258467287, -53, 53)) + mpmath.mpf((0, 33972711434846347, -60, 55))*mpmath.log(mpmath.mpf((0, 5, 0, 3))*fl_T + mpmath.mpf((0, 5, -2, 3))))]
+extra      sympy/physics/biomechanics/tests/test_curve.py::TestTendonForceLengthInverseDeGroote2016::test_print_code[NumPyPrinter-(0.995 + 0.02946663003430684*numpy.log(5.0*fl_T + 1.25))]
+extra      sympy/physics/biomechanics/tests/test_curve.py::TestTendonForceLengthInverseDeGroote2016::test_print_code[OctaveCodePrinter-(0.995 + 0.02946663003430684*log(5.0*fl_T + 1.25))]
+extra      sympy/physics/biomechanics/tests/test_curve.py::TestTendonForceLengthInverseDeGroote2016::test_print_code[PythonCodePrinter-(0.995 + 0.02946663003430684*math.log(5.0*fl_T + 1.25))]
+extra      sympy/physics/biomechanics/tests/test_curve.py::TestTendonForceLengthInverseDeGroote2016::test_print_code[SciPyPrinter-(0.995 + 0.02946663003430684*numpy.log(5.0*fl_T + 1.25))]
+timeout    sympy/physics/continuum_mechanics/tests/test_beam.py::test_beam_units
+none       sympy/physics/continuum_mechanics/tests/test_beam.py::test_max_deflection_Beam3D
+none       sympy/physics/optics/tests/test_medium.py::test_medium
+none       sympy/physics/optics/tests/test_utils.py::test_brewster_angle
+none       sympy/physics/optics/tests/test_utils.py::test_fresnel_coefficients
+none       sympy/physics/optics/tests/test_utils.py::test_refraction_angle
+none       sympy/physics/quantum/tests/test_dagger.py::test_scalars
+none       sympy/physics/units/tests/test_quantities.py::test_quantity_abs
+none       sympy/physics/units/tests/test_quantities.py::test_units
+none       sympy/physics/units/tests/test_unit_system_cgs_gauss.py::test_conversion_to_from_si
+none       sympy/polys/numberfields/tests/test_galoisgroups.py::test__galois_group_degree_4_root_approx
+none       sympy/polys/numberfields/tests/test_galoisgroups.py::test__galois_group_degree_5_hybrid
+none       sympy/polys/numberfields/tests/test_galoisgroups.py::test_tschirnhausen_transformation
+none       sympy/polys/numberfields/tests/test_minpoly.py::test_minpoly_compose
+none       sympy/polys/numberfields/tests/test_subfield.py::test_issue_27798
+none       sympy/polys/tests/test_polyroots.py::test_roots_binomial
+none       sympy/polys/tests/test_polyroots.py::test_roots_quadratic
+none       sympy/polys/tests/test_polyroots.py::test_roots_quintic
+none       sympy/polys/tests/test_polytools.py::test_Poly_lift_multiple
+none       sympy/polys/tests/test_rootoftools.py::test_CRootOf___eval_Eq__
+none       sympy/polys/tests/test_rootoftools.py::test_CRootOf_eval_rational
+none       sympy/polys/tests/test_rootoftools.py::test_CRootOf_is_real
+none       sympy/polys/tests/test_rootoftools.py::test_CRootOf_lazy
+none       sympy/polys/tests/test_rootoftools.py::test_CRootOf_real_roots
+none       sympy/polys/tests/test_rootoftools.py::test_RootOf_is_imaginary
+none       sympy/polys/tests/test_rootoftools.py::test_is_disjoint
+none       sympy/polys/tests/test_rootoftools.py::test_issue_15920
+none       sympy/polys/tests/test_rootoftools.py::test_issue_24978
+none       sympy/polys/tests/test_specialpolys.py::test_swinnerton_dyer_poly
+extra      sympy/printing/pretty/tests/test_pretty.py::test_pretty_UnevaluatedExpr
+extra      sympy/printing/tests/test_latex.py::test_latex_UnevaluatedExpr
+agree      sympy/printing/tests/test_rust.py::test_Functions
+none       sympy/printing/tests/test_rust.py::test_Piecewise
+extra      sympy/printing/tests/test_rust.py::test_parenthesize_typecast
+extra      sympy/printing/tests/test_str.py::test_UnevaluatedExpr
+none       sympy/series/tests/test_demidovich.py::test_Limits_simple_0
+none       sympy/series/tests/test_demidovich.py::test_leadterm
+none       sympy/series/tests/test_gruntz.py::test_gruntz_I
+none       sympy/series/tests/test_gruntz.py::test_limit4
+none       sympy/series/tests/test_limits.py::test_issue_10382
+none       sympy/series/tests/test_limits.py::test_issue_12555
+none       sympy/series/tests/test_limits.py::test_issue_14411
+none       sympy/series/tests/test_limits.py::test_issue_14556
+none       sympy/series/tests/test_limits.py::test_issue_14811
+none       sympy/series/tests/test_limits.py::test_issue_18969
+none       sympy/series/tests/test_limits.py::test_issue_19586
+none       sympy/series/tests/test_limits.py::test_issue_19739
+none       sympy/series/tests/test_limits.py::test_issue_22181
+none       sympy/series/tests/test_limits.py::test_issue_22982_15323
+none       sympy/series/tests/test_limits.py::test_issue_3934
+none       sympy/series/tests/test_limits.py::test_issue_8462
+recursion  sympy/series/tests/test_limitseq.py::test_alternating_sign
+recursion  sympy/series/tests/test_limitseq.py::test_issue_10382
+none       sympy/series/tests/test_nseries.py::test_bug2
+none       sympy/series/tests/test_nseries.py::test_issue_3463
+none       sympy/series/tests/test_nseries.py::test_log_power1
+none       sympy/sets/tests/test_fancysets.py::test_Range_symbolic
+none       sympy/sets/tests/test_sets.py::test_contains
+none       sympy/sets/tests/test_sets.py::test_intersect1
+none       sympy/simplify/tests/test_fu.py::test_TR2i
+none       sympy/simplify/tests/test_hyperexpand.py::test_lerchphi
+none       sympy/simplify/tests/test_radsimp.py::test_radsimp
+none       sympy/simplify/tests/test_simplify.py::test_issue_14269
+none       sympy/simplify/tests/test_simplify.py::test_issue_7971_21740
+none       sympy/simplify/tests/test_sqrtdenest.py::test_sqrt_symbolic_denest
+none       sympy/simplify/tests/test_sqrtdenest.py::test_sqrtdenest2
+none       sympy/simplify/tests/test_sqrtdenest.py::test_sqrtdenest3
+none       sympy/simplify/tests/test_sqrtdenest.py::test_sqrtdenest4
+none       sympy/simplify/tests/test_trigsimp.py::test_trigsimp_issues
+none       sympy/solvers/ode/tests/test_ode.py::test_dsolve_all_hint
+engine-exc sympy/solvers/ode/tests/test_ode.py::test_issue_22604
+none       sympy/solvers/ode/tests/test_single.py
+none       sympy/solvers/ode/tests/test_systems.py::test_higher_order_to_first_order_12
+none       sympy/solvers/tests/test_inequalities.py::test_issue_8235
+none       sympy/solvers/tests/test_inequalities.py::test_solve_univariate_inequality
+none       sympy/solvers/tests/test_polysys.py::test_solve_triangulated
+none       sympy/solvers/tests/test_solvers.py::test_issue_17650
+none       sympy/solvers/tests/test_solvers.py::test_issue_4793
+none       sympy/solvers/tests/test_solvers.py::test_issue_7982
+none       sympy/solvers/tests/test_solvers.py::test_lambert_multivariate
+none       sympy/solvers/tests/test_solvers.py::test_quintics_1
+none       sympy/solvers/tests/test_solvers.py::test_quintics_2
+none       sympy/solvers/tests/test_solvers.py::test_real_imag_splitting
+none       sympy/solvers/tests/test_solvers.py::test_real_roots
+none       sympy/solvers/tests/test_solveset.py::test_exponential_real
+extra      sympy/solvers/tests/test_solveset.py::test_exponential_symbols
+none       sympy/solvers/tests/test_solveset.py::test_invert_real
+none       sympy/solvers/tests/test_solveset.py::test_issue_10158
+none       sympy/solvers/tests/test_solveset.py::test_issue_11184
+none       sympy/solvers/tests/test_solveset.py::test_issue_12032
+timeout    sympy/solvers/tests/test_solveset.py::test_issue_14454
+none       sympy/solvers/tests/test_solveset.py::test_issue_14565
+none       sympy/solvers/tests/test_solveset.py::test_issue_14642
+none       sympy/solvers/tests/test_solveset.py::test_issue_21047
+none       sympy/solvers/tests/test_solveset.py::test_issue_5132_1
+none       sympy/solvers/tests/test_solveset.py::test_issue_9616
+none       sympy/solvers/tests/test_solveset.py::test_issue_9913
+none       sympy/solvers/tests/test_solveset.py::test_logarithmic
+none       sympy/solvers/tests/test_solveset.py::test_nonlinsolve_complex
+none       sympy/solvers/tests/test_solveset.py::test_return_root_of
+none       sympy/solvers/tests/test_solveset.py::test_solve_exponential
+none       sympy/solvers/tests/test_solveset.py::test_solve_hyperbolic
+none       sympy/solvers/tests/test_solveset.py::test_solve_only_exp_1
+none       sympy/solvers/tests/test_solveset.py::test_solve_polynomial
+none       sympy/solvers/tests/test_solveset.py::test_solve_trig_hyp_by_inversion
+none       sympy/solvers/tests/test_solveset.py::test_solve_trig_hyp_symbolic
+none       sympy/solvers/tests/test_solveset.py::test_solveset_sqrt_2
+none       sympy/solvers/tests/test_solveset.py::test_units
+none       sympy/stats/tests/test_compound_rv.py::test_unevaluated_CompoundDist
+none       sympy/stats/tests/test_continuous_rv.py::test_Lomax
+none       sympy/stats/tests/test_continuous_rv.py::test_Or
+none       sympy/stats/tests/test_continuous_rv.py::test_loglogistic
+none       sympy/stats/tests/test_continuous_rv.py::test_union
+none       sympy/stats/tests/test_discrete_rv.py::test_DiscreteRV
+none       sympy/stats/tests/test_finite_rv.py::test_dice
+none       sympy/stats/tests/test_rv.py::test_issue_10052
+none       sympy/stats/tests/test_rv.py::test_real
+none       sympy/stats/tests/test_stochastic_process.py::test_WienerProcess
+none       sympy/tensor/array/expressions/tests/test_convert_array_to_matrix.py::test_arrayexpr_convert_array_to_diagonalized_vector
+none       sympy/tensor/array/expressions/tests/test_convert_array_to_matrix.py::test_arrayexpr_convert_array_to_matrix
+none       sympy/tensor/array/expressions/tests/test_convert_array_to_matrix.py::test_identify_removable_identity_matrices
+none       sympy/tensor/tests/test_indexed.py::test_differentiation
+none       sympy/utilities/tests/test_pickling.py::test_pickling_polys_rootoftools
+none       sympy/utilities/tests/test_wester.py::test_K2
+none       sympy/utilities/tests/test_wester.py::test_M23
+none       sympy/utilities/tests/test_wester.py::test_M7
+none       sympy/utilities/tests/test_wester.py::test_R18
+none       sympy/utilities/tests/test_wester.py::test_T2
+wrong      sympy/vector/tests/test_printing.py::test_issue_23058
