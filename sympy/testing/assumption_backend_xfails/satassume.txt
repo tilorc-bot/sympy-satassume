@@ -2,10 +2,17 @@
 # (both assumption systems answered by satassume 5a7d3b8, no fallback).
 # Seeded from the 443 test ids that newly fail in the experiment's `both` run
 # (sympy 751a370, Python 3.14.8, -n 16), tags from its root-cause attribution
-# (shadow replay v2); then verified with this repository (see README.md).
+# (shadow replay v2); then verified with this repository (see README.md, -n 2 and -n 4):
+# added test_arit.py::test_pow_im (assert, order dependent) and 17
+# test_hyperbolic.py series tests (recursion: RecursionError only under xdist
+# in a chunk with other modules; it moves to the next series test when one is
+# not run, so all of them are listed; 2 were already listed as none), and 3
+# test_comb_numbers.py tests (recursion: (-1)**Integer recurses in
+# NegativeOne._eval_power when is_odd and is_even of the integer exponent are
+# not answered, which happens in some runs only).
 # An entry without "::" is a module whose collection fails: its collection
 # error is reported as a skip.
-# Tag counts: none 310, wrong 86, extra 24, unrecorded 7, agree 7, timeout 4, recursion 4, engine-exc 1
+# Tag counts (464): none 310, wrong 86, extra 24, recursion 24, unrecorded 7, agree 7, timeout 4, engine-exc 1, assert 1
 #
 # Tags (the cause of the failure):
 #   none        the backend answers None where SymPy answers True/False
@@ -65,6 +72,7 @@ agree      sympy/core/tests/test_arit.py::test_Pow_is_zero
 none       sympy/core/tests/test_arit.py::test_issue_8247_8354
 none       sympy/core/tests/test_arit.py::test_mul_zero_detection
 none       sympy/core/tests/test_arit.py::test_polar
+assert     sympy/core/tests/test_arit.py::test_pow_im
 none       sympy/core/tests/test_assumptions.py::test_Add_is_imaginary
 none       sympy/core/tests/test_assumptions.py::test_Add_is_pos_neg
 none       sympy/core/tests/test_assumptions.py::test_Mul_is_algebraic
@@ -110,7 +118,10 @@ none       sympy/functions/combinatorial/tests/test_comb_numbers.py::test_catala
 none       sympy/functions/combinatorial/tests/test_comb_numbers.py::test_fibonacci
 none       sympy/functions/combinatorial/tests/test_comb_numbers.py::test_genocchi
 none       sympy/functions/combinatorial/tests/test_comb_numbers.py::test_harmonic
+recursion  sympy/functions/combinatorial/tests/test_comb_numbers.py::test_nC_nP_nT
+recursion  sympy/functions/combinatorial/tests/test_comb_numbers.py::test_nD_derangements
 none       sympy/functions/combinatorial/tests/test_comb_numbers.py::test_partition
+recursion  sympy/functions/combinatorial/tests/test_comb_numbers.py::test_tribonacci
 none       sympy/functions/elementary/tests/test_complexes.py::test_Abs
 none       sympy/functions/elementary/tests/test_complexes.py::test_conjugate
 none       sympy/functions/elementary/tests/test_complexes.py::test_im
@@ -127,24 +138,41 @@ none       sympy/functions/elementary/tests/test_exponential.py::test_log_expand
 none       sympy/functions/elementary/tests/test_exponential.py::test_log_simplify
 none       sympy/functions/elementary/tests/test_exponential.py::test_polar
 none       sympy/functions/elementary/tests/test_hyperbolic.py::test_acosh
+recursion  sympy/functions/elementary/tests/test_hyperbolic.py::test_acosh_nseries
+recursion  sympy/functions/elementary/tests/test_hyperbolic.py::test_acosh_series
 none       sympy/functions/elementary/tests/test_hyperbolic.py::test_acoth
+recursion  sympy/functions/elementary/tests/test_hyperbolic.py::test_acoth_nseries
+recursion  sympy/functions/elementary/tests/test_hyperbolic.py::test_acoth_series
 none       sympy/functions/elementary/tests/test_hyperbolic.py::test_acsch
 none       sympy/functions/elementary/tests/test_hyperbolic.py::test_acsch_leading_term
 none       sympy/functions/elementary/tests/test_hyperbolic.py::test_acsch_nseries
+recursion  sympy/functions/elementary/tests/test_hyperbolic.py::test_acsch_series
 none       sympy/functions/elementary/tests/test_hyperbolic.py::test_asech
+recursion  sympy/functions/elementary/tests/test_hyperbolic.py::test_asech_nseries
+recursion  sympy/functions/elementary/tests/test_hyperbolic.py::test_asech_series
 none       sympy/functions/elementary/tests/test_hyperbolic.py::test_asinh
 none       sympy/functions/elementary/tests/test_hyperbolic.py::test_asinh_leading_term
 none       sympy/functions/elementary/tests/test_hyperbolic.py::test_asinh_nseries
+recursion  sympy/functions/elementary/tests/test_hyperbolic.py::test_asinh_series
 none       sympy/functions/elementary/tests/test_hyperbolic.py::test_atanh
+recursion  sympy/functions/elementary/tests/test_hyperbolic.py::test_atanh_nseries
+recursion  sympy/functions/elementary/tests/test_hyperbolic.py::test_atanh_series
 none       sympy/functions/elementary/tests/test_hyperbolic.py::test_cosh
 none       sympy/functions/elementary/tests/test_hyperbolic.py::test_cosh_nonnegative
 none       sympy/functions/elementary/tests/test_hyperbolic.py::test_cosh_positive
+recursion  sympy/functions/elementary/tests/test_hyperbolic.py::test_cosh_series
 none       sympy/functions/elementary/tests/test_hyperbolic.py::test_coth
+recursion  sympy/functions/elementary/tests/test_hyperbolic.py::test_coth_series
 none       sympy/functions/elementary/tests/test_hyperbolic.py::test_csch
+recursion  sympy/functions/elementary/tests/test_hyperbolic.py::test_csch_series
+recursion  sympy/functions/elementary/tests/test_hyperbolic.py::test_issue_25175
 none       sympy/functions/elementary/tests/test_hyperbolic.py::test_sech
+recursion  sympy/functions/elementary/tests/test_hyperbolic.py::test_sech_series
 none       sympy/functions/elementary/tests/test_hyperbolic.py::test_sign_assumptions
 none       sympy/functions/elementary/tests/test_hyperbolic.py::test_sinh
+recursion  sympy/functions/elementary/tests/test_hyperbolic.py::test_sinh_series
 none       sympy/functions/elementary/tests/test_hyperbolic.py::test_tanh
+recursion  sympy/functions/elementary/tests/test_hyperbolic.py::test_tanh_series
 none       sympy/functions/elementary/tests/test_integers.py::test_ceiling
 none       sympy/functions/elementary/tests/test_integers.py::test_frac
 none       sympy/functions/elementary/tests/test_miscellaneous.py::test_Max
