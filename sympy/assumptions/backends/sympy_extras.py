@@ -17,6 +17,7 @@ Only the new assumption system is answered by this backend. Answering
 the others cost a call of sympy-extras per cache miss. See the README of
 this repository for the measurements.
 """
+from __future__ import annotations
 
 from sympy.assumptions.ask import Q
 from sympy.assumptions.assume import AppliedPredicate

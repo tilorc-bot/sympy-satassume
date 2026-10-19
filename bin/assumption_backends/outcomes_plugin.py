@@ -6,6 +6,7 @@ failed, skipped, xfailed, xpassed, timeout or (for a collection report)
 collect-failed / collect-skipped. Use with
 ``PYTHONPATH=bin/assumption_backends pytest -p outcomes_plugin``.
 """
+from __future__ import annotations
 import os
 
 _path = os.environ.get('OUTCOMES_FILE')

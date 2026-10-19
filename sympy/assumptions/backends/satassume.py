@@ -4,6 +4,7 @@ satassume (https://github.com/tilorc-bot/satassume) is a SAT (CDCL) based
 engine for ``ask``. Its answer is returned as it is: ``None`` for a query it
 cannot decide or that is outside its scope (matrix predicates, for instance).
 """
+from __future__ import annotations
 
 from satassume import sympy_api
 

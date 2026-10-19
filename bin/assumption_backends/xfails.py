@@ -14,6 +14,7 @@ assumptions backends.
 
 See sympy/testing/assumption_backend_xfails/README.md.
 """
+from __future__ import annotations
 import collections
 import datetime
 import glob
