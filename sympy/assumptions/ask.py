@@ -403,6 +403,11 @@ def _normalize_expr(expr):
     expr = _normalize_applied_predicates(expr)
     return expr
 
+# The answer of the new assumption system when a backend replaces it, see
+# sympy.assumptions.backends.
+_backend_ask = None
+
+
 def ask(proposition, assumptions=True, context=global_assumptions):
     """
     Function to evaluate the proposition with assumptions.
@@ -507,6 +512,11 @@ def ask(proposition, assumptions=True, context=global_assumptions):
 
     if isinstance(assumptions, Predicate) or assumptions.kind is not BooleanKind:
         raise TypeError("assumptions must be a valid logical expression")
+
+    if _backend_ask is not None:
+        result = _backend_ask(proposition, assumptions)
+        if result is not NotImplemented:
+            return result
 
     # Normalize both proposition and assumptions
     proposition = _normalize_expr(proposition)

@@ -57,6 +57,7 @@ if sys.version_info < (3, 10):
 modules = [
     'sympy.algebras',
     'sympy.assumptions',
+    'sympy.assumptions.backends',
     'sympy.assumptions.handlers',
     'sympy.assumptions.predicates',
     'sympy.assumptions.relation',
@@ -326,6 +327,8 @@ if __name__ == '__main__':
           # Set upper bound when making the release branch.
           install_requires=[
               'mpmath >= 1.1.0',
+              'satassume @ git+https://github.com/tilorc-bot/satassume'
+              '@5a7d3b8d9e8e1a8d28a1f05892ff581ab4446bc9',
           ],
           py_modules=['isympy'],
           packages=['sympy'] + modules + tests,
@@ -370,6 +373,9 @@ if __name__ == '__main__':
             ],
           extras_require={
               "dev": ["pytest>=7.1.0", "hypothesis>=6.70.0"],
+              "sympy_extras": [
+                  "sympy-extras @ git+https://github.com/Upabjojr/sympy-extras"
+                  "@ae8f9f6c959111413c2fbe0675ce76e52e4d7502"],
             },
           **extra_kwargs
           )

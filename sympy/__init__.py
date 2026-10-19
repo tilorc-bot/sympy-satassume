@@ -546,3 +546,7 @@ __all__.extend((
     'tensor',
     'utilities',
 ))
+
+from sympy.assumptions.backends import _install
+_install()
+del _install
