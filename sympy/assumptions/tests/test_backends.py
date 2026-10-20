@@ -78,6 +78,9 @@ def test_backend_commutative_false_stored_alone():
     _ask = _wrap_is(lambda obj, fact: answers[fact], None)
     A = Symbol('A', commutative=False)
     e = Mul(0, A, evaluate=False)
+    # as the is_* property does before it calls _ask: e's own copy of the
+    # class's default facts (else the stub would write those of every Mul)
+    e._assumptions = e.default_assumptions.copy()
     before = dict(e._assumptions)
     assert _ask('commutative', e) is False
     after = dict(e._assumptions)
