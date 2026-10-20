@@ -112,8 +112,8 @@ or, from a clone, `pip install -e .` (or `-e '.[sympy_extras]'`).
 
 Pinned dependencies (`setup.py`):
 
-- satassume `93a612ee227c17fe8ace00b9972384682cbb9d35` (a dependency:
-  `satassume @ git+https://github.com/tilorc-bot/satassume@93a612e...`);
+- satassume `b26f1742c88972903d03b05a86bc3d05cdb45473` (a dependency:
+  `satassume @ git+https://github.com/tilorc-bot/satassume@b26f174...`);
 - sympy-extras `ae8f9f6c959111413c2fbe0675ce76e52e4d7502` (the optional extra
   `sympy_extras`).
 
@@ -164,6 +164,12 @@ satassume, 48 for sympy_extras):
   (194 listed + 324 upstream), 7 xpassed (upstream), 731 skipped, of 14334.
   `test_pow_im` passed (in this run and in the runs of the listed ids), so
   it is no longer listed.
+- Measured again on 2026-10-20 with satassume `b26f174` (#180 final review
+  F1, F3) and the F2 wrapper fix (satassume backend, `-n 8`): 13076 passed,
+  3 failed before listing (`test_hermitian`, two `test_delta.py`
+  deltaproduct tests, answers given up for soundness; listed since, 197
+  entries), 518 xfailed (194 listed + 324 upstream), 7 xpassed (upstream),
+  731 skipped, of 14335.
 - With the `sympy` backend the results are those of upstream SymPy at
   `751a370` (the same run of upstream without this change, in the
   experiment, gave the same outcome for every test; this copy adds the 3
