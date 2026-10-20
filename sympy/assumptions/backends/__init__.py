@@ -34,7 +34,10 @@ choose the backend of one system only.
 While a backend runs, any query it makes in turn (for instance a backend
 reading ``x.is_positive`` of a symbol, or calling ``sympy.ask``) is answered
 by SymPy's own code. Until ``sympy`` has finished importing, SymPy's own code
-answers every query.
+answers every query. The ``is_*`` properties of
+:class:`~sympy.assumptions.wrapper.AssumptionsWrapper` always use SymPy's own
+code: they ask the new system (so its backend) under the assumptions of the
+wrapper.
 
 Examples
 ========
@@ -116,9 +119,13 @@ def _wrap_ask(backend_ask):
     return ask
 
 
-def _wrap_is(backend_is, sympy_ask):
+def _wrap_is(backend_is, sympy_ask, own=()):
+    """``_ask`` of :mod:`sympy.core.assumptions` answered by ``backend_is``.
+    Instances of the classes in ``own`` keep SymPy's code: their
+    ``_eval_is_*`` methods are the answer (``AssumptionsWrapper`` asks the
+    new system under its own assumptions, which ``backend_is`` never sees)."""
     def _ask(fact, obj):
-        if _state['depth']:
+        if _state['depth'] or isinstance(obj, own):
             return sympy_ask(fact, obj)
         _state['depth'] += 1
         try:
@@ -176,7 +183,9 @@ def _install():
                                  'the %s assumption system' % (name, system))
             names[system] = 'sympy'
     if _state['old'] is not None:
-        core_assumptions._ask = _wrap_is(_state['old'], core_assumptions._ask)
+        wrapper = importlib.import_module('sympy.assumptions.wrapper')
+        core_assumptions._ask = _wrap_is(_state['old'], core_assumptions._ask,
+                                         (wrapper.AssumptionsWrapper,))
     if _state['new'] is not None:
         ask_module._backend_ask = _wrap_ask(_state['new'])
     _state['names'] = names

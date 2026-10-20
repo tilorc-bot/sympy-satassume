@@ -19,9 +19,12 @@
 # test_systems.py::test_sysode_linear_neq_order1_type3 (#190) and
 # test_integrals.py::test_issue_14241 (#194); marked the tests that expect an
 # answer that does not hold, or SymPy's old None, with a "like S1" comment.
+# Then (satassume #180 S6, the adapter keeps SymPy's code for
+# AssumptionsWrapper) removed 4 entries and listed test_query.py::test_prime
+# (like S1).
 # An entry without "::" is a module whose collection fails: its collection
 # error is reported as a skip.
-# Tag counts (240): none 116, wrong 85, extra 27, agree 7, unrecorded 3, assert 2
+# Tag counts (237): none 112, wrong 85, extra 28, agree 7, unrecorded 3, assert 2
 #
 # Tags (the cause of the failure):
 #   none        the backend answers None where SymPy answers True/False
@@ -41,9 +44,10 @@ none       sympy/assumptions/tests/test_matrices.py::test_diagonal
 none       sympy/assumptions/tests/test_matrices.py::test_invertible
 none       sympy/assumptions/tests/test_matrices.py::test_singular
 none       sympy/assumptions/tests/test_query.py::test_functions_in_assumptions
-none       sympy/assumptions/tests/test_query.py::test_relational
+# like S1 (#180): expects Q.prime(x**y) None under Q.prime(x), integer 0 < y < 2;
+# satassume says True (y = 1, so x**y is the prime x). Was hidden by S6.
+extra      sympy/assumptions/tests/test_query.py::test_prime
 none       sympy/assumptions/tests/test_refine.py::test_matrixelement
-none       sympy/assumptions/tests/test_wrapper.py::test_AssumptionsWrapper
 none       sympy/calculus/tests/test_accumulationbounds.py::test_issue_18795
 none       sympy/codegen/tests/test_rewriting.py::test_matsolve
 none       sympy/concrete/tests/test_delta.py::test_deltaproduct_mul_add_x_kd_add_y_kd
@@ -86,8 +90,6 @@ none       sympy/core/tests/test_noncommutative.py::test_conjugate
 none       sympy/core/tests/test_noncommutative.py::test_transpose
 extra      sympy/core/tests/test_power.py::test_issue_14815
 none       sympy/core/tests/test_power.py::test_issue_17450
-none       sympy/core/tests/test_relational.py::test_is_eq
-none       sympy/core/tests/test_relational.py::test_is_ge_le
 none       sympy/functions/combinatorial/tests/test_comb_factorials.py::test_binomial
 none       sympy/functions/combinatorial/tests/test_comb_factorials.py::test_factorial
 none       sympy/functions/combinatorial/tests/test_comb_factorials.py::test_ff_eval_apply
