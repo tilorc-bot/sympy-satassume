@@ -137,10 +137,17 @@ def _wrap_is(backend_is, sympy_ask, own=()):
             answer = backend_is(obj, fact)
         finally:
             _state['depth'] -= 1
+        kb = obj._assumptions
+        if fact == 'commutative' and answer is False:
+            # A fact of how obj is built, not of its value: Mul(0, A,
+            # evaluate=False) is non-commutative but evaluates to 0, so
+            # SymPy's implications (zero False, complex False, ...) are not
+            # stored; the backend answers those itself.
+            dict.__setitem__(kb, fact, answer)
+            return answer
         # Store the answer with its implications, as SymPy's own code does:
         # SymPy's code (answering nested queries) skips the facts it finds
         # stored and so would never deduce from them.
-        kb = obj._assumptions
         saved = dict(kb)
         try:
             kb.deduce_all_facts(((fact, answer),))
