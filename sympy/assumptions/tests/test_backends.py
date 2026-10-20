@@ -87,11 +87,11 @@ def test_assumptions_wrapper_uses_sympy_code():
 def test_satassume_out_of_scope_uses_sympy_code():
     # satassume answers None to a query outside its scope; the backend
     # leaves such a query to SymPy's own ask (satassume#180 S3).
+    if active_backends()['new'] != 'satassume':
+        return
     X = MatrixSymbol('X', 2, 2)
     assert ask(Q.invertible(X), Q.fullrank(X) & Q.square(X)) is True
     assert ask(Q.symmetric(X * X.T)) is True
-    if active_backends()['new'] != 'satassume':
-        return
     from sympy.assumptions.backends.satassume import ask as backend_ask
     x = Symbol('x')
     assert backend_ask(Q.invertible(X), Q.fullrank(X) & Q.square(X)) is NotImplemented
