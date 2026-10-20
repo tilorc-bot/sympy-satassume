@@ -48,6 +48,8 @@ from __future__ import annotations
 import importlib
 import os
 
+from sympy.core.facts import InconsistentAssumptions
+
 __all__ = ['BACKENDS', 'DEFAULT_BACKEND', 'active_backends', 'xfail_key']
 
 #: The names of the backends and the modules that implement them.
@@ -123,7 +125,13 @@ def _wrap_is(backend_is, sympy_ask):
             answer = backend_is(obj, fact)
         finally:
             _state['depth'] -= 1
-        dict.__setitem__(obj._assumptions, fact, answer)
+        # Store the answer with its implications, as SymPy's own code does:
+        # SymPy's code (answering nested queries) skips the facts it finds
+        # stored and so would never deduce from them.
+        try:
+            obj._assumptions.deduce_all_facts(((fact, answer),))
+        except InconsistentAssumptions:
+            dict.__setitem__(obj._assumptions, fact, answer)
         return answer
     return _ask
 
