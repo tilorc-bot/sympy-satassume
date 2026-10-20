@@ -10,9 +10,12 @@
 # test_comb_numbers.py tests (recursion: (-1)**Integer recurses in
 # NegativeOne._eval_power when is_odd and is_even of the integer exponent are
 # not answered, which happens in some runs only).
+# Then removed the 21 recursion entries caused by the adapter storing backend
+# answers without their deductions (the 20 above and
+# test_sums_products.py::test_summation_by_residues).
 # An entry without "::" is a module whose collection fails: its collection
 # error is reported as a skip.
-# Tag counts (464): none 310, wrong 86, extra 24, recursion 24, unrecorded 7, agree 7, timeout 4, engine-exc 1, assert 1
+# Tag counts (288): none 160, wrong 85, extra 25, agree 7, timeout 4, recursion 3, unrecorded 3, assert 1
 #
 # Tags (the cause of the failure):
 #   none        the backend answers None where SymPy answers True/False
@@ -48,7 +51,6 @@ none       sympy/concrete/tests/test_sums_products.py::test_has_reversed_limits
 none       sympy/concrete/tests/test_sums_products.py::test_is_zero
 recursion  sympy/concrete/tests/test_sums_products.py::test_issue_14112
 none       sympy/concrete/tests/test_sums_products.py::test_issue_2787
-recursion  sympy/concrete/tests/test_sums_products.py::test_summation_by_residues
 none       sympy/concrete/tests/test_sums_products.py::test_sumproducts_assumptions
 unrecorded sympy/core/tests/test_arit.py::test_Add_Mul_is_finite
 unrecorded sympy/core/tests/test_arit.py::test_Add_Mul_is_integer
@@ -95,9 +97,6 @@ none       sympy/functions/combinatorial/tests/test_comb_factorials.py::test_ff_
 none       sympy/functions/combinatorial/tests/test_comb_factorials.py::test_rf_eval_apply
 none       sympy/functions/combinatorial/tests/test_comb_numbers.py::test_genocchi
 none       sympy/functions/combinatorial/tests/test_comb_numbers.py::test_harmonic
-recursion  sympy/functions/combinatorial/tests/test_comb_numbers.py::test_nC_nP_nT
-recursion  sympy/functions/combinatorial/tests/test_comb_numbers.py::test_nD_derangements
-recursion  sympy/functions/combinatorial/tests/test_comb_numbers.py::test_tribonacci
 none       sympy/functions/elementary/tests/test_complexes.py::test_Abs
 none       sympy/functions/elementary/tests/test_complexes.py::test_conjugate
 none       sympy/functions/elementary/tests/test_complexes.py::test_im
@@ -109,29 +108,12 @@ none       sympy/functions/elementary/tests/test_exponential.py::test_exp_assump
 none       sympy/functions/elementary/tests/test_exponential.py::test_issue_9116
 none       sympy/functions/elementary/tests/test_exponential.py::test_log_exact
 none       sympy/functions/elementary/tests/test_exponential.py::test_log_simplify
-recursion  sympy/functions/elementary/tests/test_hyperbolic.py::test_acosh_nseries
-recursion  sympy/functions/elementary/tests/test_hyperbolic.py::test_acosh_series
-recursion  sympy/functions/elementary/tests/test_hyperbolic.py::test_acoth_nseries
-recursion  sympy/functions/elementary/tests/test_hyperbolic.py::test_acoth_series
 none       sympy/functions/elementary/tests/test_hyperbolic.py::test_acsch
-recursion  sympy/functions/elementary/tests/test_hyperbolic.py::test_acsch_series
-recursion  sympy/functions/elementary/tests/test_hyperbolic.py::test_asech_nseries
-recursion  sympy/functions/elementary/tests/test_hyperbolic.py::test_asech_series
-recursion  sympy/functions/elementary/tests/test_hyperbolic.py::test_asinh_series
-recursion  sympy/functions/elementary/tests/test_hyperbolic.py::test_atanh_nseries
-recursion  sympy/functions/elementary/tests/test_hyperbolic.py::test_atanh_series
 none       sympy/functions/elementary/tests/test_hyperbolic.py::test_cosh
 none       sympy/functions/elementary/tests/test_hyperbolic.py::test_cosh_nonnegative
 none       sympy/functions/elementary/tests/test_hyperbolic.py::test_cosh_positive
-recursion  sympy/functions/elementary/tests/test_hyperbolic.py::test_cosh_series
-recursion  sympy/functions/elementary/tests/test_hyperbolic.py::test_coth_series
-recursion  sympy/functions/elementary/tests/test_hyperbolic.py::test_csch_series
-recursion  sympy/functions/elementary/tests/test_hyperbolic.py::test_issue_25175
-recursion  sympy/functions/elementary/tests/test_hyperbolic.py::test_sech_series
 none       sympy/functions/elementary/tests/test_hyperbolic.py::test_sinh
-recursion  sympy/functions/elementary/tests/test_hyperbolic.py::test_sinh_series
 none       sympy/functions/elementary/tests/test_hyperbolic.py::test_tanh
-recursion  sympy/functions/elementary/tests/test_hyperbolic.py::test_tanh_series
 none       sympy/functions/elementary/tests/test_integers.py::test_frac
 none       sympy/functions/elementary/tests/test_miscellaneous.py::test_Min
 none       sympy/functions/elementary/tests/test_trigonometric.py::test_asec_is_real
