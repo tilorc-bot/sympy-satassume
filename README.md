@@ -7,7 +7,10 @@ with its history) in which SymPy's assumption systems are answered by a
 pluggable **backend**. The default backend is
 [satassume](https://github.com/tilorc-bot/satassume), a SAT (CDCL) based
 engine, which replaces **both** assumption systems, with **no fallback** to
-SymPy's own code: its answer is returned as it is, `None` included.
+SymPy's own code: its answer is returned as it is, `None` included. The one
+exception: a query of the new system outside the scope of satassume (matrix
+predicates, for instance; `satassume.sympy_api.out_of_scope`) that satassume
+answers `None` is answered by SymPy's own `ask`.
 
 It is an experiment, not a SymPy release, and it is not affiliated with the
 SymPy project. The package is still imported as `sympy`.
@@ -57,7 +60,11 @@ How it works (`sympy/assumptions/backends/`):
   and sympy-extras import SymPy, so they cannot be imported earlier).
 - New system: `ask()` calls the backend after checking and sympifying its
   arguments and merging the global assumptions. Every caller of `ask`
-  (`refine`, the handlers, matrices, ...) goes through it.
+  (`refine`, the handlers, matrices, ...) goes through it. A backend that
+  returns `NotImplemented` leaves the query to SymPy's code: the satassume
+  backend does so when satassume answers `None` and
+  `satassume.sympy_api.out_of_scope` gives a category (`relation`, `matrix`,
+  `custom` or `other`) for the query.
 - Old system: the module function `sympy.core.assumptions._ask`, which every
   `is_*` property calls on a miss of the object's cache, is replaced. The
   backend's answer is stored in the cache of the object together with its
@@ -102,8 +109,8 @@ or, from a clone, `pip install -e .` (or `-e '.[sympy_extras]'`).
 
 Pinned dependencies (`setup.py`):
 
-- satassume `29a5ed76fd18ac8b3d93a1301aefdd553a5000cb` (a dependency:
-  `satassume @ git+https://github.com/tilorc-bot/satassume@29a5ed7...`);
+- satassume `93a612ee227c17fe8ace00b9972384682cbb9d35` (a dependency:
+  `satassume @ git+https://github.com/tilorc-bot/satassume@93a612e...`);
 - sympy-extras `ae8f9f6c959111413c2fbe0675ce76e52e4d7502` (the optional extra
   `sympy_extras`).
 
@@ -149,6 +156,9 @@ satassume, 48 for sympy_extras):
   (`test_integrals.py::test_issue_14241`, listed since), 562 xfailed,
   8 xpassed (`test_pow_im` and 7 upstream), 731 skipped;
   `test_single.py` collects now.
+- Measured again on 2026-10-20 with satassume `93a612e` and 194 entries
+  (satassume backend, `-n 8`, 1178 s): 13078 passed, 0 failed, 518 xfailed
+  (194 listed + 324 upstream), 7 xpassed (upstream), 731 skipped, of 14334.
 - With the `sympy` backend the results are those of upstream SymPy at
   `751a370` (the same run of upstream without this change, in the
   experiment, gave the same outcome for every test; this copy adds the 3
