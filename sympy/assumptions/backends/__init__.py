@@ -11,14 +11,19 @@ code. It is a module that may define
 
 * ``ask(proposition, assumptions)``, the answer to a query of the new system
   (``True``, ``False`` or ``None``), given after ``ask`` has checked and
-  sympified its arguments and merged the global assumptions;
+  sympified its arguments and merged the global assumptions; it may return
+  ``NotImplemented`` to leave the query to SymPy's own code;
 * ``is_(expr, fact)``, the answer to ``expr.is_<fact>`` for the old system,
   called on a miss of the cache of ``expr``;
 * ``setup()``, called once when the backend is installed.
 
 A system whose function the backend does not define stays with SymPy's own
 code. The answer of the backend is returned as it is, ``None`` included;
-there is no fallback to SymPy's code.
+there is no fallback to SymPy's code unless the backend returns
+``NotImplemented``. The satassume backend does that for a query that
+satassume answers ``None`` and that ``satassume.sympy_api.out_of_scope`` gives
+a category (a relation, a matrix or custom predicate, in the proposition or the
+assumptions).
 
 The backend is chosen when ``sympy`` is imported, from the environment
 variable ``SYMPY_ASSUMPTIONS_BACKEND``:

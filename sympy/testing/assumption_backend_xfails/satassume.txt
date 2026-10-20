@@ -1,5 +1,5 @@
 # Expected failures of the test suite with SYMPY_ASSUMPTIONS_BACKEND=satassume
-# (both assumption systems answered by satassume at the setup.py pin, no fallback).
+# (both assumption systems answered by satassume at the setup.py pin).
 # Seeded from the 443 test ids that newly fail in the experiment's `both` run
 # (sympy 751a370, satassume 5a7d3b8, Python 3.14.8, -n 16), tags from its root-cause attribution
 # (shadow replay v2); then verified with this repository (see README.md, -n 2 and -n 4):
@@ -22,9 +22,13 @@
 # Then (satassume #180 S6, the adapter keeps SymPy's code for
 # AssumptionsWrapper) removed 4 entries and listed test_query.py::test_prime
 # (like S1).
+# Then, at pin 93a612e (satassume #210, #211, #214, #215, #218, #221, #224 and
+# the earlier #180 fixes): removed the 21 entries that pass, and (satassume
+# #180 S3, the backend leaves an out-of-scope query that satassume answers
+# None to SymPy's ask) the 22 matrix entries.
 # An entry without "::" is a module whose collection fails: its collection
 # error is reported as a skip.
-# Tag counts (237): none 112, wrong 85, extra 28, agree 7, unrecorded 3, assert 2
+# Tag counts (194): none 70, wrong 85, extra 28, agree 7, unrecorded 3, assert 1
 #
 # Tags (the cause of the failure):
 #   none        the backend answers None where SymPy answers True/False
@@ -40,18 +44,10 @@
 #   exc-<name>  the exception <name> is raised (cause not analysed further)
 #
 # Format: TAG NODEID
-none       sympy/assumptions/tests/test_matrices.py::test_diagonal
-none       sympy/assumptions/tests/test_matrices.py::test_invertible
-none       sympy/assumptions/tests/test_matrices.py::test_singular
-none       sympy/assumptions/tests/test_query.py::test_functions_in_assumptions
 # like S1 (#180): expects Q.prime(x**y) None under Q.prime(x), integer 0 < y < 2;
 # satassume says True (y = 1, so x**y is the prime x). Was hidden by S6.
 extra      sympy/assumptions/tests/test_query.py::test_prime
-none       sympy/assumptions/tests/test_refine.py::test_matrixelement
 none       sympy/calculus/tests/test_accumulationbounds.py::test_issue_18795
-none       sympy/codegen/tests/test_rewriting.py::test_matsolve
-none       sympy/concrete/tests/test_delta.py::test_deltaproduct_mul_add_x_kd_add_y_kd
-none       sympy/concrete/tests/test_delta.py::test_deltaproduct_mul_add_x_y_add_y_kd
 extra      sympy/concrete/tests/test_products.py::test_multiple_products
 # like S1 (#180): expects Sum(x, (x, 1, 1)).is_zero None; satassume says False (the sum is 1).
 extra      sympy/concrete/tests/test_sums_products.py::test_is_zero
@@ -59,7 +55,6 @@ none       sympy/concrete/tests/test_sums_products.py::test_sumproducts_assumpti
 unrecorded sympy/core/tests/test_arit.py::test_Add_Mul_is_finite
 unrecorded sympy/core/tests/test_arit.py::test_Add_Mul_is_integer
 unrecorded sympy/core/tests/test_arit.py::test_Add_is_negative_positive
-none       sympy/core/tests/test_arit.py::test_Mod
 # #180 S7: (m**2/2).is_even None for even m (it holds); then like S1 (#180):
 # expects (m**2/3).is_even False for even m; m = 6 gives 12.
 none       sympy/core/tests/test_arit.py::test_Mul_is_even_odd
@@ -73,21 +68,10 @@ agree      sympy/core/tests/test_arit.py::test_Pow_is_zero
 none       sympy/core/tests/test_arit.py::test_issue_8247_8354
 # like S1 (#180): expects (b*z).is_extended_real True; b = 0, z = oo gives nan.
 none       sympy/core/tests/test_arit.py::test_mul_zero_detection
-assert     sympy/core/tests/test_arit.py::test_pow_im
 none       sympy/core/tests/test_assumptions.py::test_Add_is_pos_neg
-none       sympy/core/tests/test_assumptions.py::test_Mul_is_algebraic
-none       sympy/core/tests/test_assumptions.py::test_Mul_is_prime_composite
-none       sympy/core/tests/test_assumptions.py::test_Pow_is_algebraic
-none       sympy/core/tests/test_assumptions.py::test_Pow_is_prime_composite
 none       sympy/core/tests/test_assumptions.py::test_issue_10302
-none       sympy/core/tests/test_assumptions.py::test_issue_9115_9150
 none       sympy/core/tests/test_assumptions.py::test_issues_8632_8633_8638_8675_8992
 none       sympy/core/tests/test_assumptions.py::test_special_is_rational
-none       sympy/core/tests/test_exprtools.py::test_factor_nc
-none       sympy/core/tests/test_function.py::test_function_non_commutative
-none       sympy/core/tests/test_noncommutative.py::test_adjoint
-none       sympy/core/tests/test_noncommutative.py::test_conjugate
-none       sympy/core/tests/test_noncommutative.py::test_transpose
 extra      sympy/core/tests/test_power.py::test_issue_14815
 none       sympy/core/tests/test_power.py::test_issue_17450
 none       sympy/functions/combinatorial/tests/test_comb_factorials.py::test_binomial
@@ -107,18 +91,14 @@ none       sympy/functions/elementary/tests/test_exponential.py::test_log_exact
 none       sympy/functions/elementary/tests/test_exponential.py::test_log_simplify
 none       sympy/functions/elementary/tests/test_hyperbolic.py::test_acsch
 none       sympy/functions/elementary/tests/test_hyperbolic.py::test_cosh
-none       sympy/functions/elementary/tests/test_hyperbolic.py::test_cosh_nonnegative
-none       sympy/functions/elementary/tests/test_hyperbolic.py::test_cosh_positive
 none       sympy/functions/elementary/tests/test_hyperbolic.py::test_sinh
 none       sympy/functions/elementary/tests/test_hyperbolic.py::test_tanh
 none       sympy/functions/elementary/tests/test_integers.py::test_frac
 none       sympy/functions/elementary/tests/test_miscellaneous.py::test_Min
 none       sympy/functions/elementary/tests/test_trigonometric.py::test_asec_is_real
-none       sympy/functions/elementary/tests/test_trigonometric.py::test_cos
 none       sympy/functions/elementary/tests/test_trigonometric.py::test_cot
 none       sympy/functions/elementary/tests/test_trigonometric.py::test_csc
 none       sympy/functions/elementary/tests/test_trigonometric.py::test_sec
-none       sympy/functions/elementary/tests/test_trigonometric.py::test_sin
 none       sympy/functions/elementary/tests/test_trigonometric.py::test_sinc
 none       sympy/functions/elementary/tests/test_trigonometric.py::test_tan
 none       sympy/functions/special/tests/test_beta_functions.py::test_beta
@@ -137,21 +117,6 @@ extra      sympy/integrals/tests/test_integrals.py::test_issue_14241
 none       sympy/integrals/tests/test_integrals.py::test_issue_8368i
 none       sympy/integrals/tests/test_meijerint.py::test_inversion_exp_real_nonreal_shift
 none       sympy/integrals/tests/test_meijerint.py::test_messy
-none       sympy/matrices/expressions/tests/test_blockmatrix.py::test_BlockMatrix_2x2_inverse_numeric
-none       sympy/matrices/expressions/tests/test_blockmatrix.py::test_BlockMatrix_2x2_inverse_symbolic
-none       sympy/matrices/expressions/tests/test_blockmatrix.py::test_BlockMatrix_Determinant
-none       sympy/matrices/expressions/tests/test_determinant.py::test_refine
-none       sympy/matrices/expressions/tests/test_diagonal.py::test_DiagMatrix
-none       sympy/matrices/expressions/tests/test_diagonal.py::test_DiagonalMatrix
-none       sympy/matrices/expressions/tests/test_factorizations.py::test_LU
-none       sympy/matrices/expressions/tests/test_factorizations.py::test_QR
-none       sympy/matrices/expressions/tests/test_factorizations.py::test_svd
-none       sympy/matrices/expressions/tests/test_fourier.py::test_dft
-none       sympy/matrices/expressions/tests/test_inverse.py::test_refine
-none       sympy/matrices/expressions/tests/test_matmul.py::test_refine
-none       sympy/matrices/expressions/tests/test_transpose.py::test_refine
-none       sympy/matrices/expressions/tests/test_transpose.py::test_transpose1x1
-none       sympy/matrices/tests/test_matrices.py::test_hermitian
 none       sympy/matrices/tests/test_matrices.py::test_matrix_norm
 none       sympy/matrices/tests/test_matrixbase.py::test_matrix_norm
 wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthActiveDeGroote2016::test_print_code[C11CodePrinter-(0.81399999999999995*exp(-1.0/2.0*pow(l_M_tilde - 1.0600000000000001, 2)/pow(0.063299999999999995*l_M_tilde + 0.16200000000000001, 2)) + 0.433*exp(-1.0/2.0*pow(l_M_tilde - 0.71699999999999997, 2)/pow(0.20000000000000001*l_M_tilde - 0.029899999999999999, 2)) + 0.10000000000000001*exp(-3.9899134986753491*pow(l_M_tilde - 1.0, 2)))]
@@ -260,7 +225,6 @@ extra      sympy/physics/biomechanics/tests/test_curve.py::TestTendonForceLength
 extra      sympy/physics/biomechanics/tests/test_curve.py::TestTendonForceLengthInverseDeGroote2016::test_print_code[OctaveCodePrinter-(0.995 + 0.02946663003430684*log(5.0*fl_T + 1.25))]
 extra      sympy/physics/biomechanics/tests/test_curve.py::TestTendonForceLengthInverseDeGroote2016::test_print_code[PythonCodePrinter-(0.995 + 0.02946663003430684*math.log(5.0*fl_T + 1.25))]
 extra      sympy/physics/biomechanics/tests/test_curve.py::TestTendonForceLengthInverseDeGroote2016::test_print_code[SciPyPrinter-(0.995 + 0.02946663003430684*numpy.log(5.0*fl_T + 1.25))]
-none       sympy/physics/quantum/tests/test_dagger.py::test_scalars
 none       sympy/polys/numberfields/tests/test_minpoly.py::test_minpoly_compose
 extra      sympy/printing/pretty/tests/test_pretty.py::test_pretty_UnevaluatedExpr
 extra      sympy/printing/tests/test_latex.py::test_latex_UnevaluatedExpr
@@ -288,7 +252,4 @@ none       sympy/solvers/tests/test_solveset.py::test_solve_hyperbolic
 none       sympy/solvers/tests/test_solveset.py::test_solve_trig_hyp_by_inversion
 none       sympy/solvers/tests/test_solveset.py::test_solve_trig_hyp_symbolic
 none       sympy/stats/tests/test_compound_rv.py::test_unevaluated_CompoundDist
-none       sympy/tensor/array/expressions/tests/test_convert_array_to_matrix.py::test_arrayexpr_convert_array_to_diagonalized_vector
-none       sympy/tensor/array/expressions/tests/test_convert_array_to_matrix.py::test_arrayexpr_convert_array_to_matrix
-none       sympy/tensor/array/expressions/tests/test_convert_array_to_matrix.py::test_identify_removable_identity_matrices
 wrong      sympy/vector/tests/test_printing.py::test_issue_23058
