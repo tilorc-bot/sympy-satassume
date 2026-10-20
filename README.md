@@ -102,8 +102,8 @@ or, from a clone, `pip install -e .` (or `-e '.[sympy_extras]'`).
 
 Pinned dependencies (`setup.py`):
 
-- satassume `5a7d3b8d9e8e1a8d28a1f05892ff581ab4446bc9` (a dependency:
-  `satassume @ git+https://github.com/tilorc-bot/satassume@5a7d3b8...`);
+- satassume `29a5ed76fd18ac8b3d93a1301aefdd553a5000cb` (a dependency:
+  `satassume @ git+https://github.com/tilorc-bot/satassume@29a5ed7...`);
 - sympy-extras `ae8f9f6c959111413c2fbe0675ce76e52e4d7502` (the optional extra
   `sympy_extras`).
 
