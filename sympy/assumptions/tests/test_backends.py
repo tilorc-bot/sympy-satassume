@@ -3,7 +3,7 @@ import os
 
 from sympy.assumptions.ask import Q, ask
 from sympy.assumptions.backends import (BACKENDS, DEFAULT_BACKEND, _state,
-                                        active_backends)
+                                        _wrap_is, active_backends)
 from sympy.core.cache import clear_cache
 from sympy.core.numbers import Integer
 from sympy.core.relational import Gt
@@ -49,6 +49,21 @@ def test_backend_answers_stored_with_deductions():
     finally:
         _state['depth'] -= 1
     assert S.NegativeOne**n == 1
+
+
+def test_backend_answer_inconsistent_with_stored_facts():
+    # Such an answer is stored without its implications, and a None answer
+    # keeps the stored value.
+    answers = {'negative': True, 'positive': None}
+    _ask = _wrap_is(lambda obj, fact: answers[fact], None)
+    p = Symbol('p')
+    dict.__setitem__(p._assumptions, 'positive', True)  # stored alone
+    before = dict(p._assumptions)
+    assert _ask('negative', p) is True
+    assert _ask('positive', p) is None
+    after = dict(p._assumptions)
+    assert after.pop('negative') is True
+    assert after == before
 
 
 def test_sympy_extras_statements():

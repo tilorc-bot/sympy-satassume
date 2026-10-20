@@ -128,10 +128,17 @@ def _wrap_is(backend_is, sympy_ask):
         # Store the answer with its implications, as SymPy's own code does:
         # SymPy's code (answering nested queries) skips the facts it finds
         # stored and so would never deduce from them.
+        kb = obj._assumptions
+        saved = dict(kb)
         try:
-            obj._assumptions.deduce_all_facts(((fact, answer),))
+            kb.deduce_all_facts(((fact, answer),))
         except InconsistentAssumptions:
-            dict.__setitem__(obj._assumptions, fact, answer)
+            # Undo the implications stored before the conflict; store the
+            # answer alone, unless it is None and a value is known.
+            dict.clear(kb)
+            dict.update(kb, saved)
+            if answer is not None:
+                dict.__setitem__(kb, fact, answer)
         return answer
     return _ask
 
