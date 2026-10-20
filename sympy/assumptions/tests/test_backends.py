@@ -70,10 +70,11 @@ def test_backend_answer_inconsistent_with_stored_facts():
     assert after == before
 
 
-def test_backend_commutative_false_stored_alone():
+def test_backend_commutative_false_not_stored():
     # commutative=False is a fact of how the object is built: Mul(0, A,
     # evaluate=False) evaluates to 0, so zero=False must not be stored
-    # with it (#180 final review F2).
+    # with it (#180 final review F2), and stored alone a copy of the
+    # facts would derive it again: it is not stored.
     answers = {'commutative': False, 'zero': None}
     _ask = _wrap_is(lambda obj, fact: answers[fact], None)
     A = Symbol('A', commutative=False)
@@ -83,9 +84,7 @@ def test_backend_commutative_false_stored_alone():
     e._assumptions = e.default_assumptions.copy()
     before = dict(e._assumptions)
     assert _ask('commutative', e) is False
-    after = dict(e._assumptions)
-    assert after.pop('commutative') is False
-    assert after == before
+    assert dict(e._assumptions) == before
     assert _ask('zero', e) is None
     if active_backends()['old'] == 'satassume':
         e = sin(Mul(0, A, evaluate=False), evaluate=False)

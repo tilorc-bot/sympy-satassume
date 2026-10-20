@@ -141,9 +141,10 @@ def _wrap_is(backend_is, sympy_ask, own=()):
         if fact == 'commutative' and answer is False:
             # A fact of how obj is built, not of its value: Mul(0, A,
             # evaluate=False) is non-commutative but evaluates to 0, so
-            # SymPy's implications (zero False, complex False, ...) are not
-            # stored; the backend answers those itself.
-            dict.__setitem__(kb, fact, answer)
+            # SymPy's implications (zero False, complex False, ...) do not
+            # hold, and the answer is not stored: stored alone, a later copy
+            # of kb would derive them again (InconsistentAssumptions with a
+            # stored zero=None).  The backend answers every read.
             return answer
         # Store the answer with its implications, as SymPy's own code does:
         # SymPy's code (answering nested queries) skips the facts it finds
