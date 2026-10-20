@@ -144,6 +144,11 @@ satassume, 48 for sympy_extras):
   `test_arit.py::test_pow_im`, which fails only in some runs.
 - satassume has 13 tests fewer: `sympy/solvers/ode/tests/test_single.py`
   fails at collection with satassume and is reported as one skipped module.
+- Measured again on 2026-10-20 with satassume `29a5ed7` and 240 entries
+  (satassume backend, `-n 8`): 13030 passed, 1 failed
+  (`test_integrals.py::test_issue_14241`, listed since), 562 xfailed,
+  8 xpassed (`test_pow_im` and 7 upstream), 731 skipped;
+  `test_single.py` collects now.
 - With the `sympy` backend the results are those of upstream SymPy at
   `751a370` (the same run of upstream without this change, in the
   experiment, gave the same outcome for every test; this copy adds the 3

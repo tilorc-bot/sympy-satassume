@@ -13,9 +13,12 @@
 # Then removed the 21 recursion entries caused by the adapter storing backend
 # answers without their deductions (the 20 above and
 # test_sums_products.py::test_summation_by_residues).
-# Then, with satassume 29a5ed7 (#180 fixes up to satassume #207), removed the 49
-# entries that pass and marked the tests that expect an answer that does not
-# hold, or SymPy's old None, with a "like S1" comment.
+# Then, for the satassume #180 fixes (pin 29a5ed7): removed 111 entries
+# (satassume #185, #190), 23 (#192), 22 (#194) and 49 (#200-#207, and the 4
+# timeout entries, which run in under a second now); listed
+# test_systems.py::test_sysode_linear_neq_order1_type3 (#190) and
+# test_integrals.py::test_issue_14241 (#194); marked the tests that expect an
+# answer that does not hold, or SymPy's old None, with a "like S1" comment.
 # An entry without "::" is a module whose collection fails: its collection
 # error is reported as a skip.
 # Tag counts (240): none 116, wrong 85, extra 27, agree 7, unrecorded 3, assert 2
@@ -48,13 +51,13 @@ none       sympy/concrete/tests/test_delta.py::test_deltaproduct_mul_add_x_y_add
 extra      sympy/concrete/tests/test_products.py::test_multiple_products
 # like S1 (#180): expects Sum(x, (x, 1, 1)).is_zero None; satassume says False (the sum is 1).
 extra      sympy/concrete/tests/test_sums_products.py::test_is_zero
-# like S1 (#180): expects Product(2, (m, 0, oo)).is_negative False; satassume leaves the divergent product None.
 none       sympy/concrete/tests/test_sums_products.py::test_sumproducts_assumptions
 unrecorded sympy/core/tests/test_arit.py::test_Add_Mul_is_finite
 unrecorded sympy/core/tests/test_arit.py::test_Add_Mul_is_integer
 unrecorded sympy/core/tests/test_arit.py::test_Add_is_negative_positive
 none       sympy/core/tests/test_arit.py::test_Mod
-# like S1 (#180): expects (m**2/3).is_even False for even m; m = 6 gives 12.
+# #180 S7: (m**2/2).is_even None for even m (it holds); then like S1 (#180):
+# expects (m**2/3).is_even False for even m; m = 6 gives 12.
 none       sympy/core/tests/test_arit.py::test_Mul_is_even_odd
 none       sympy/core/tests/test_arit.py::test_Mul_is_imaginary_real
 # like S1 (#180): expects (xr**xr).is_finite None; satassume says True.
