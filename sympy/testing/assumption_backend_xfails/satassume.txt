@@ -107,7 +107,6 @@ none       sympy/functions/elementary/tests/test_complexes.py::test_sign
 none       sympy/functions/elementary/tests/test_complexes.py::test_zero_assumptions
 none       sympy/functions/elementary/tests/test_exponential.py::test_exp_assumptions
 none       sympy/functions/elementary/tests/test_exponential.py::test_issue_9116
-none       sympy/functions/elementary/tests/test_exponential.py::test_lambertw
 none       sympy/functions/elementary/tests/test_exponential.py::test_log_exact
 none       sympy/functions/elementary/tests/test_exponential.py::test_log_simplify
 recursion  sympy/functions/elementary/tests/test_hyperbolic.py::test_acosh_nseries
@@ -145,26 +144,10 @@ none       sympy/functions/elementary/tests/test_trigonometric.py::test_sec
 none       sympy/functions/elementary/tests/test_trigonometric.py::test_sin
 none       sympy/functions/elementary/tests/test_trigonometric.py::test_sinc
 none       sympy/functions/elementary/tests/test_trigonometric.py::test_tan
-none       sympy/functions/special/tests/test_bessel.py::test_airy_base
-none       sympy/functions/special/tests/test_bessel.py::test_expand
 none       sympy/functions/special/tests/test_beta_functions.py::test_beta
-none       sympy/functions/special/tests/test_beta_functions.py::test_betainc
-none       sympy/functions/special/tests/test_beta_functions.py::test_betainc_regularized
-none       sympy/functions/special/tests/test_error_functions.py::test_erf
 none       sympy/functions/special/tests/test_error_functions.py::test_erf2
-none       sympy/functions/special/tests/test_error_functions.py::test_erfc
-none       sympy/functions/special/tests/test_error_functions.py::test_erfcinv
-none       sympy/functions/special/tests/test_error_functions.py::test_erfi
 none       sympy/functions/special/tests/test_error_functions.py::test_expint
-none       sympy/functions/special/tests/test_error_functions.py::test_fresnel
-none       sympy/functions/special/tests/test_error_functions.py::test_owent_is_extended_real
-none       sympy/functions/special/tests/test_error_functions.py::test_owent_is_zero
-none       sympy/functions/special/tests/test_error_functions.py::test_owent_sign_and_finite
 none       sympy/functions/special/tests/test_gamma_functions.py::test_gamma
-none       sympy/functions/special/tests/test_gamma_functions.py::test_issue_8524
-none       sympy/functions/special/tests/test_gamma_functions.py::test_issue_8657
-none       sympy/functions/special/tests/test_gamma_functions.py::test_loggamma
-none       sympy/functions/special/tests/test_gamma_functions.py::test_multigamma
 none       sympy/functions/special/tests/test_gamma_functions.py::test_polygamma
 none       sympy/functions/special/tests/test_zeta_functions.py::test_issue_10475
 none       sympy/geometry/tests/test_ellipse.py::test_construction
@@ -313,8 +296,6 @@ extra      sympy/printing/tests/test_latex.py::test_latex_UnevaluatedExpr
 agree      sympy/printing/tests/test_rust.py::test_Functions
 extra      sympy/printing/tests/test_rust.py::test_parenthesize_typecast
 extra      sympy/printing/tests/test_str.py::test_UnevaluatedExpr
-none       sympy/series/tests/test_limits.py::test_issue_14556
-none       sympy/series/tests/test_limits.py::test_issue_18969
 none       sympy/series/tests/test_limits.py::test_issue_19739
 none       sympy/series/tests/test_limits.py::test_issue_22181
 recursion  sympy/series/tests/test_limitseq.py::test_alternating_sign
@@ -331,12 +312,9 @@ none       sympy/solvers/ode/tests/test_single.py
 # (checksysodesol True); the test expects the old output form, like S1.
 extra      sympy/solvers/ode/tests/test_systems.py::test_sysode_linear_neq_order1_type3
 none       sympy/solvers/tests/test_inequalities.py::test_solve_univariate_inequality
-none       sympy/solvers/tests/test_solvers.py::test_issue_17650
-none       sympy/solvers/tests/test_solvers.py::test_lambert_multivariate
 none       sympy/solvers/tests/test_solvers.py::test_real_imag_splitting
 none       sympy/solvers/tests/test_solveset.py::test_exponential_real
 extra      sympy/solvers/tests/test_solveset.py::test_exponential_symbols
-none       sympy/solvers/tests/test_solveset.py::test_invert_real
 none       sympy/solvers/tests/test_solveset.py::test_issue_10158
 timeout    sympy/solvers/tests/test_solveset.py::test_issue_14454
 none       sympy/solvers/tests/test_solveset.py::test_issue_14565
