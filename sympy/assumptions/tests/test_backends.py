@@ -6,11 +6,13 @@ from sympy.assumptions.wrapper import AssumptionsWrapper
 from sympy.assumptions.backends import (BACKENDS, DEFAULT_BACKEND, _state,
                                         _wrap_is, active_backends)
 from sympy.core.cache import clear_cache
+from sympy.core.mul import Mul
 from sympy.core.numbers import Integer
 from sympy.core.relational import Gt, is_eq
 from sympy.core.singleton import S
 from sympy.core.symbol import Dummy, Symbol
 from sympy.external import import_module
+from sympy.functions.elementary.trigonometric import sin
 from sympy.matrices.expressions.matexpr import MatrixSymbol
 from sympy.testing.pytest import skip
 
@@ -66,6 +68,29 @@ def test_backend_answer_inconsistent_with_stored_facts():
     after = dict(p._assumptions)
     assert after.pop('negative') is True
     assert after == before
+
+
+def test_backend_commutative_false_not_stored():
+    # commutative=False is a fact of how the object is built: Mul(0, A,
+    # evaluate=False) evaluates to 0, so zero=False must not be stored
+    # with it (#180 final review F2), and stored alone a copy of the
+    # facts would derive it again: it is not stored.
+    answers = {'commutative': False, 'zero': None}
+    _ask = _wrap_is(lambda obj, fact: answers[fact], None)
+    A = Symbol('A', commutative=False)
+    e = Mul(0, A, evaluate=False)
+    # as the is_* property does before it calls _ask: e's own copy of the
+    # class's default facts (else the stub would write those of every Mul)
+    e._assumptions = e.default_assumptions.copy()
+    before = dict(e._assumptions)
+    assert _ask('commutative', e) is False
+    assert dict(e._assumptions) == before
+    assert _ask('zero', e) is None
+    if active_backends()['old'] == 'satassume':
+        e = sin(Mul(0, A, evaluate=False), evaluate=False)
+        assert e.is_commutative is False
+        assert e.is_zero is None
+        assert e.doit() == 0
 
 
 def test_assumptions_wrapper_uses_sympy_code():

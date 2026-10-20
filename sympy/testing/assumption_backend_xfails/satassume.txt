@@ -26,9 +26,13 @@
 # the earlier #180 fixes): removed the 21 entries that pass, and (satassume
 # #180 S3, the backend leaves an out-of-scope query that satassume answers
 # None to SymPy's ask) the 22 matrix entries.
+# Then, at pin b26f174 (satassume #225, #226: the #180 final review F1 and F3,
+# answers given up for soundness): listed test_matrices.py::test_hermitian
+# ((c - Dagger(c)).is_zero is None: 0 for a Hermitian c) and the two
+# test_delta.py deltaproduct tests (lost with #225's level-2 restriction).
 # An entry without "::" is a module whose collection fails: its collection
 # error is reported as a skip.
-# Tag counts (194): none 70, wrong 85, extra 28, agree 7, unrecorded 3, assert 1
+# Tag counts (197): none 73, wrong 85, extra 28, agree 7, unrecorded 3, assert 1
 #
 # Tags (the cause of the failure):
 #   none        the backend answers None where SymPy answers True/False
@@ -48,6 +52,8 @@
 # satassume says True (y = 1, so x**y is the prime x). Was hidden by S6.
 extra      sympy/assumptions/tests/test_query.py::test_prime
 none       sympy/calculus/tests/test_accumulationbounds.py::test_issue_18795
+none       sympy/concrete/tests/test_delta.py::test_deltaproduct_mul_add_x_kd_add_y_kd
+none       sympy/concrete/tests/test_delta.py::test_deltaproduct_mul_add_x_y_add_y_kd
 extra      sympy/concrete/tests/test_products.py::test_multiple_products
 # like S1 (#180): expects Sum(x, (x, 1, 1)).is_zero None; satassume says False (the sum is 1).
 extra      sympy/concrete/tests/test_sums_products.py::test_is_zero
@@ -117,6 +123,7 @@ extra      sympy/integrals/tests/test_integrals.py::test_issue_14241
 none       sympy/integrals/tests/test_integrals.py::test_issue_8368i
 none       sympy/integrals/tests/test_meijerint.py::test_inversion_exp_real_nonreal_shift
 none       sympy/integrals/tests/test_meijerint.py::test_messy
+none       sympy/matrices/tests/test_matrices.py::test_hermitian
 none       sympy/matrices/tests/test_matrices.py::test_matrix_norm
 none       sympy/matrices/tests/test_matrixbase.py::test_matrix_norm
 wrong      sympy/physics/biomechanics/tests/test_curve.py::TestFiberForceLengthActiveDeGroote2016::test_print_code[C11CodePrinter-(0.81399999999999995*exp(-1.0/2.0*pow(l_M_tilde - 1.0600000000000001, 2)/pow(0.063299999999999995*l_M_tilde + 0.16200000000000001, 2)) + 0.433*exp(-1.0/2.0*pow(l_M_tilde - 0.71699999999999997, 2)/pow(0.20000000000000001*l_M_tilde - 0.029899999999999999, 2)) + 0.10000000000000001*exp(-3.9899134986753491*pow(l_M_tilde - 1.0, 2)))]
