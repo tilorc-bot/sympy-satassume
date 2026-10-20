@@ -2,11 +2,12 @@ from __future__ import annotations
 import os
 
 from sympy.assumptions.ask import Q, ask
+from sympy.assumptions.wrapper import AssumptionsWrapper
 from sympy.assumptions.backends import (BACKENDS, DEFAULT_BACKEND, _state,
                                         _wrap_is, active_backends)
 from sympy.core.cache import clear_cache
 from sympy.core.numbers import Integer
-from sympy.core.relational import Gt
+from sympy.core.relational import Gt, is_eq
 from sympy.core.singleton import S
 from sympy.core.symbol import Symbol
 from sympy.external import import_module
@@ -64,6 +65,21 @@ def test_backend_answer_inconsistent_with_stored_facts():
     after = dict(p._assumptions)
     assert after.pop('negative') is True
     assert after == before
+
+
+def test_assumptions_wrapper_uses_sympy_code():
+    # AssumptionsWrapper.is_* ask the new system under the wrapper's
+    # assumptions, which an old-system backend never sees (#180 S6).
+    calls = []
+    _ask = _wrap_is(lambda obj, fact: calls.append(fact), lambda fact, obj: 'sympy',
+                    (AssumptionsWrapper,))
+    y = Symbol('y')
+    assert _ask('integer', AssumptionsWrapper(y, Q.even(y))) == 'sympy'
+    assert calls == []
+    assert _ask('integer', y) is None and calls == ['integer']
+    assert AssumptionsWrapper(y, Q.even(y)).is_integer is True
+    x = Symbol('x')
+    assert is_eq(x, S.Zero, assumptions=Q.zero(x)) is True
 
 
 def test_sympy_extras_statements():
