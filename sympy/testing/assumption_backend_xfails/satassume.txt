@@ -19,10 +19,11 @@
 # test_systems.py::test_sysode_linear_neq_order1_type3 (#190) and
 # test_integrals.py::test_issue_14241 (#194); marked the tests that expect an
 # answer that does not hold, or SymPy's old None, with a "like S1" comment.
+# Then (satassume #180 S6, the adapter keeps SymPy's code for
+# AssumptionsWrapper) removed 4 entries and listed test_query.py::test_prime
+# (like S1).
 # An entry without "::" is a module whose collection fails: its collection
 # error is reported as a skip.
-# Then (#180 S6, the adapter keeps SymPy's code for AssumptionsWrapper)
-# removed 4 entries and listed test_query.py::test_prime (like S1).
 # Tag counts (237): none 112, wrong 85, extra 28, agree 7, unrecorded 3, assert 2
 #
 # Tags (the cause of the failure):

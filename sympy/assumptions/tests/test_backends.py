@@ -9,7 +9,7 @@ from sympy.core.cache import clear_cache
 from sympy.core.numbers import Integer
 from sympy.core.relational import Gt, is_eq
 from sympy.core.singleton import S
-from sympy.core.symbol import Symbol
+from sympy.core.symbol import Dummy, Symbol
 from sympy.external import import_module
 from sympy.testing.pytest import skip
 
@@ -73,10 +73,11 @@ def test_assumptions_wrapper_uses_sympy_code():
     calls = []
     _ask = _wrap_is(lambda obj, fact: calls.append(fact), lambda fact, obj: 'sympy',
                     (AssumptionsWrapper,))
-    y = Symbol('y')
-    assert _ask('integer', AssumptionsWrapper(y, Q.even(y))) == 'sympy'
+    d = Dummy('d')
+    assert _ask('integer', AssumptionsWrapper(d, Q.even(d))) == 'sympy'
     assert calls == []
-    assert _ask('integer', y) is None and calls == ['integer']
+    assert _ask('integer', d) is None and calls == ['integer']
+    y = Symbol('y')
     assert AssumptionsWrapper(y, Q.even(y)).is_integer is True
     x = Symbol('x')
     assert is_eq(x, S.Zero, assumptions=Q.zero(x)) is True
