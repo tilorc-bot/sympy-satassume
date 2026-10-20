@@ -1,7 +1,7 @@
 # Expected failures of the test suite with SYMPY_ASSUMPTIONS_BACKEND=satassume
-# (both assumption systems answered by satassume 5a7d3b8, no fallback).
+# (both assumption systems answered by satassume at the setup.py pin, no fallback).
 # Seeded from the 443 test ids that newly fail in the experiment's `both` run
-# (sympy 751a370, Python 3.14.8, -n 16), tags from its root-cause attribution
+# (sympy 751a370, satassume 5a7d3b8, Python 3.14.8, -n 16), tags from its root-cause attribution
 # (shadow replay v2); then verified with this repository (see README.md, -n 2 and -n 4):
 # added test_arit.py::test_pow_im (assert, order dependent) and 17
 # test_hyperbolic.py series tests (recursion: RecursionError only under xdist
@@ -13,9 +13,12 @@
 # Then removed the 21 recursion entries caused by the adapter storing backend
 # answers without their deductions (the 20 above and
 # test_sums_products.py::test_summation_by_residues).
+# Then, with satassume 29a5ed7 (#180 fixes up to satassume #207), removed the 49
+# entries that pass and marked the tests that expect an answer that does not
+# hold, or SymPy's old None, with a "like S1" comment.
 # An entry without "::" is a module whose collection fails: its collection
 # error is reported as a skip.
-# Tag counts (288): none 160, wrong 85, extra 25, agree 7, timeout 4, recursion 3, unrecorded 3, assert 1
+# Tag counts (240): none 116, wrong 85, extra 27, agree 7, unrecorded 3, assert 2
 #
 # Tags (the cause of the failure):
 #   none        the backend answers None where SymPy answers True/False
@@ -38,74 +41,63 @@ none       sympy/assumptions/tests/test_query.py::test_functions_in_assumptions
 none       sympy/assumptions/tests/test_query.py::test_relational
 none       sympy/assumptions/tests/test_refine.py::test_matrixelement
 none       sympy/assumptions/tests/test_wrapper.py::test_AssumptionsWrapper
-none       sympy/calculus/tests/test_accumulationbounds.py::test_AccumBounds
-none       sympy/calculus/tests/test_accumulationbounds.py::test_AccumBounds_pow
 none       sympy/calculus/tests/test_accumulationbounds.py::test_issue_18795
 none       sympy/codegen/tests/test_rewriting.py::test_matsolve
-timeout    sympy/combinatorics/tests/test_character_table.py::test_dixon_character_table
 none       sympy/concrete/tests/test_delta.py::test_deltaproduct_mul_add_x_kd_add_y_kd
 none       sympy/concrete/tests/test_delta.py::test_deltaproduct_mul_add_x_y_add_y_kd
 extra      sympy/concrete/tests/test_products.py::test_multiple_products
-none       sympy/concrete/tests/test_sums_products.py::test_Sum_doit
-none       sympy/concrete/tests/test_sums_products.py::test_has_reversed_limits
-none       sympy/concrete/tests/test_sums_products.py::test_is_zero
-recursion  sympy/concrete/tests/test_sums_products.py::test_issue_14112
-none       sympy/concrete/tests/test_sums_products.py::test_issue_2787
+# like S1 (#180): expects Sum(x, (x, 1, 1)).is_zero None; satassume says False (the sum is 1).
+extra      sympy/concrete/tests/test_sums_products.py::test_is_zero
+# like S1 (#180): expects Product(2, (m, 0, oo)).is_negative False; satassume leaves the divergent product None.
 none       sympy/concrete/tests/test_sums_products.py::test_sumproducts_assumptions
 unrecorded sympy/core/tests/test_arit.py::test_Add_Mul_is_finite
 unrecorded sympy/core/tests/test_arit.py::test_Add_Mul_is_integer
 unrecorded sympy/core/tests/test_arit.py::test_Add_is_negative_positive
 none       sympy/core/tests/test_arit.py::test_Mod
+# like S1 (#180): expects (m**2/3).is_even False for even m; m = 6 gives 12.
 none       sympy/core/tests/test_arit.py::test_Mul_is_even_odd
 none       sympy/core/tests/test_arit.py::test_Mul_is_imaginary_real
-none       sympy/core/tests/test_arit.py::test_Mul_is_integer
+# like S1 (#180): expects (xr**xr).is_finite None; satassume says True.
 extra      sympy/core/tests/test_arit.py::test_Pow_is_finite
 none       sympy/core/tests/test_arit.py::test_Pow_is_integer
+# like S1 (#180): expects (k**-2).is_nonpositive None; satassume says False.
 extra      sympy/core/tests/test_arit.py::test_Pow_is_nonpositive_nonnegative
 agree      sympy/core/tests/test_arit.py::test_Pow_is_zero
 none       sympy/core/tests/test_arit.py::test_issue_8247_8354
+# like S1 (#180): expects (b*z).is_extended_real True; b = 0, z = oo gives nan.
 none       sympy/core/tests/test_arit.py::test_mul_zero_detection
 assert     sympy/core/tests/test_arit.py::test_pow_im
-none       sympy/core/tests/test_assumptions.py::test_Add_is_imaginary
 none       sympy/core/tests/test_assumptions.py::test_Add_is_pos_neg
 none       sympy/core/tests/test_assumptions.py::test_Mul_is_algebraic
 none       sympy/core/tests/test_assumptions.py::test_Mul_is_prime_composite
 none       sympy/core/tests/test_assumptions.py::test_Pow_is_algebraic
 none       sympy/core/tests/test_assumptions.py::test_Pow_is_prime_composite
 none       sympy/core/tests/test_assumptions.py::test_issue_10302
-none       sympy/core/tests/test_assumptions.py::test_issue_4149
 none       sympy/core/tests/test_assumptions.py::test_issue_9115_9150
 none       sympy/core/tests/test_assumptions.py::test_issues_8632_8633_8638_8675_8992
 none       sympy/core/tests/test_assumptions.py::test_special_is_rational
-none       sympy/core/tests/test_basic.py::test_literal_evalf_is_number_is_zero_is_comparable
 none       sympy/core/tests/test_exprtools.py::test_factor_nc
-none       sympy/core/tests/test_exprtools.py::test_monotonic_sign
 none       sympy/core/tests/test_function.py::test_function_non_commutative
 none       sympy/core/tests/test_noncommutative.py::test_adjoint
 none       sympy/core/tests/test_noncommutative.py::test_conjugate
 none       sympy/core/tests/test_noncommutative.py::test_transpose
 extra      sympy/core/tests/test_power.py::test_issue_14815
 none       sympy/core/tests/test_power.py::test_issue_17450
-none       sympy/core/tests/test_power.py::test_issue_18509
 none       sympy/core/tests/test_relational.py::test_is_eq
 none       sympy/core/tests/test_relational.py::test_is_ge_le
 none       sympy/functions/combinatorial/tests/test_comb_factorials.py::test_binomial
 none       sympy/functions/combinatorial/tests/test_comb_factorials.py::test_factorial
-none       sympy/functions/combinatorial/tests/test_comb_factorials.py::test_factorial2
-none       sympy/functions/combinatorial/tests/test_comb_factorials.py::test_factorial_Mod
 none       sympy/functions/combinatorial/tests/test_comb_factorials.py::test_ff_eval_apply
 none       sympy/functions/combinatorial/tests/test_comb_factorials.py::test_rf_eval_apply
-none       sympy/functions/combinatorial/tests/test_comb_numbers.py::test_genocchi
-none       sympy/functions/combinatorial/tests/test_comb_numbers.py::test_harmonic
 none       sympy/functions/elementary/tests/test_complexes.py::test_Abs
 none       sympy/functions/elementary/tests/test_complexes.py::test_conjugate
 none       sympy/functions/elementary/tests/test_complexes.py::test_im
 none       sympy/functions/elementary/tests/test_complexes.py::test_polarify
 none       sympy/functions/elementary/tests/test_complexes.py::test_re
 none       sympy/functions/elementary/tests/test_complexes.py::test_sign
+# like S1 (#180): expects re(nzni).is_zero False; re(I*oo) is 0.
 none       sympy/functions/elementary/tests/test_complexes.py::test_zero_assumptions
 none       sympy/functions/elementary/tests/test_exponential.py::test_exp_assumptions
-none       sympy/functions/elementary/tests/test_exponential.py::test_issue_9116
 none       sympy/functions/elementary/tests/test_exponential.py::test_log_exact
 none       sympy/functions/elementary/tests/test_exponential.py::test_log_simplify
 none       sympy/functions/elementary/tests/test_hyperbolic.py::test_acsch
@@ -120,8 +112,6 @@ none       sympy/functions/elementary/tests/test_trigonometric.py::test_asec_is_
 none       sympy/functions/elementary/tests/test_trigonometric.py::test_cos
 none       sympy/functions/elementary/tests/test_trigonometric.py::test_cot
 none       sympy/functions/elementary/tests/test_trigonometric.py::test_csc
-none       sympy/functions/elementary/tests/test_trigonometric.py::test_issue_9157
-none       sympy/functions/elementary/tests/test_trigonometric.py::test_real_assumptions
 none       sympy/functions/elementary/tests/test_trigonometric.py::test_sec
 none       sympy/functions/elementary/tests/test_trigonometric.py::test_sin
 none       sympy/functions/elementary/tests/test_trigonometric.py::test_sinc
@@ -133,8 +123,12 @@ none       sympy/functions/special/tests/test_gamma_functions.py::test_gamma
 none       sympy/functions/special/tests/test_gamma_functions.py::test_polygamma
 none       sympy/functions/special/tests/test_zeta_functions.py::test_issue_10475
 none       sympy/geometry/tests/test_ellipse.py::test_construction
-none       sympy/integrals/tests/test_integrals.py::test_doit_integrals
+# like S1 (#180): expects Integral(1, (x, 1, 2), (y, 2)).is_zero False; not entailed.
 none       sympy/integrals/tests/test_integrals.py::test_is_zero
+# satassume #194 (special-function templates): with n a positive integer,
+# gamma(-n).is_finite is False and gamma(n + 1).is_positive True (both hold;
+# SymPy says None), and integrate takes a route that raises PoleError.
+extra      sympy/integrals/tests/test_integrals.py::test_issue_14241
 none       sympy/integrals/tests/test_integrals.py::test_issue_8368i
 none       sympy/integrals/tests/test_meijerint.py::test_inversion_exp_real_nonreal_shift
 none       sympy/integrals/tests/test_meijerint.py::test_messy
@@ -148,12 +142,10 @@ none       sympy/matrices/expressions/tests/test_factorizations.py::test_LU
 none       sympy/matrices/expressions/tests/test_factorizations.py::test_QR
 none       sympy/matrices/expressions/tests/test_factorizations.py::test_svd
 none       sympy/matrices/expressions/tests/test_fourier.py::test_dft
-none       sympy/matrices/expressions/tests/test_indexing.py::test_block_index_symbolic_nonzero
 none       sympy/matrices/expressions/tests/test_inverse.py::test_refine
 none       sympy/matrices/expressions/tests/test_matmul.py::test_refine
 none       sympy/matrices/expressions/tests/test_transpose.py::test_refine
 none       sympy/matrices/expressions/tests/test_transpose.py::test_transpose1x1
-timeout    sympy/matrices/tests/test_eigen.py::test_issue_20275
 none       sympy/matrices/tests/test_matrices.py::test_hermitian
 none       sympy/matrices/tests/test_matrices.py::test_matrix_norm
 none       sympy/matrices/tests/test_matrixbase.py::test_matrix_norm
@@ -263,15 +255,7 @@ extra      sympy/physics/biomechanics/tests/test_curve.py::TestTendonForceLength
 extra      sympy/physics/biomechanics/tests/test_curve.py::TestTendonForceLengthInverseDeGroote2016::test_print_code[OctaveCodePrinter-(0.995 + 0.02946663003430684*log(5.0*fl_T + 1.25))]
 extra      sympy/physics/biomechanics/tests/test_curve.py::TestTendonForceLengthInverseDeGroote2016::test_print_code[PythonCodePrinter-(0.995 + 0.02946663003430684*math.log(5.0*fl_T + 1.25))]
 extra      sympy/physics/biomechanics/tests/test_curve.py::TestTendonForceLengthInverseDeGroote2016::test_print_code[SciPyPrinter-(0.995 + 0.02946663003430684*numpy.log(5.0*fl_T + 1.25))]
-timeout    sympy/physics/continuum_mechanics/tests/test_beam.py::test_beam_units
-none       sympy/physics/optics/tests/test_medium.py::test_medium
-none       sympy/physics/optics/tests/test_utils.py::test_brewster_angle
-none       sympy/physics/optics/tests/test_utils.py::test_fresnel_coefficients
-none       sympy/physics/optics/tests/test_utils.py::test_refraction_angle
 none       sympy/physics/quantum/tests/test_dagger.py::test_scalars
-none       sympy/physics/units/tests/test_quantities.py::test_quantity_abs
-none       sympy/physics/units/tests/test_quantities.py::test_units
-none       sympy/physics/units/tests/test_unit_system_cgs_gauss.py::test_conversion_to_from_si
 none       sympy/polys/numberfields/tests/test_minpoly.py::test_minpoly_compose
 extra      sympy/printing/pretty/tests/test_pretty.py::test_pretty_UnevaluatedExpr
 extra      sympy/printing/tests/test_latex.py::test_latex_UnevaluatedExpr
@@ -280,25 +264,17 @@ extra      sympy/printing/tests/test_rust.py::test_parenthesize_typecast
 extra      sympy/printing/tests/test_str.py::test_UnevaluatedExpr
 none       sympy/series/tests/test_limits.py::test_issue_19739
 none       sympy/series/tests/test_limits.py::test_issue_22181
-recursion  sympy/series/tests/test_limitseq.py::test_alternating_sign
-recursion  sympy/series/tests/test_limitseq.py::test_issue_10382
-none       sympy/sets/tests/test_fancysets.py::test_Range_symbolic
+assert     sympy/series/tests/test_limitseq.py::test_alternating_sign
 none       sympy/sets/tests/test_sets.py::test_contains
 none       sympy/sets/tests/test_sets.py::test_intersect1
-none       sympy/simplify/tests/test_hyperexpand.py::test_lerchphi
 none       sympy/simplify/tests/test_simplify.py::test_issue_14269
-none       sympy/simplify/tests/test_simplify.py::test_issue_7971_21740
-none       sympy/solvers/ode/tests/test_ode.py::test_dsolve_all_hint
-none       sympy/solvers/ode/tests/test_single.py
 # satassume #180 C-SIGN (PR #190): dsolve returns an equivalent form for eqs10
 # (checksysodesol True); the test expects the old output form, like S1.
 extra      sympy/solvers/ode/tests/test_systems.py::test_sysode_linear_neq_order1_type3
 none       sympy/solvers/tests/test_inequalities.py::test_solve_univariate_inequality
-none       sympy/solvers/tests/test_solvers.py::test_real_imag_splitting
 none       sympy/solvers/tests/test_solveset.py::test_exponential_real
 extra      sympy/solvers/tests/test_solveset.py::test_exponential_symbols
 none       sympy/solvers/tests/test_solveset.py::test_issue_10158
-timeout    sympy/solvers/tests/test_solveset.py::test_issue_14454
 none       sympy/solvers/tests/test_solveset.py::test_issue_14565
 none       sympy/solvers/tests/test_solveset.py::test_issue_5132_1
 none       sympy/solvers/tests/test_solveset.py::test_issue_9616
@@ -306,18 +282,8 @@ none       sympy/solvers/tests/test_solveset.py::test_nonlinsolve_complex
 none       sympy/solvers/tests/test_solveset.py::test_solve_hyperbolic
 none       sympy/solvers/tests/test_solveset.py::test_solve_trig_hyp_by_inversion
 none       sympy/solvers/tests/test_solveset.py::test_solve_trig_hyp_symbolic
-none       sympy/solvers/tests/test_solveset.py::test_units
 none       sympy/stats/tests/test_compound_rv.py::test_unevaluated_CompoundDist
-none       sympy/stats/tests/test_continuous_rv.py::test_Or
-none       sympy/stats/tests/test_continuous_rv.py::test_loglogistic
-none       sympy/stats/tests/test_continuous_rv.py::test_union
-none       sympy/stats/tests/test_discrete_rv.py::test_DiscreteRV
-none       sympy/stats/tests/test_finite_rv.py::test_dice
-none       sympy/stats/tests/test_rv.py::test_issue_10052
-none       sympy/stats/tests/test_rv.py::test_real
-none       sympy/stats/tests/test_stochastic_process.py::test_WienerProcess
 none       sympy/tensor/array/expressions/tests/test_convert_array_to_matrix.py::test_arrayexpr_convert_array_to_diagonalized_vector
 none       sympy/tensor/array/expressions/tests/test_convert_array_to_matrix.py::test_arrayexpr_convert_array_to_matrix
 none       sympy/tensor/array/expressions/tests/test_convert_array_to_matrix.py::test_identify_removable_identity_matrices
-none       sympy/tensor/tests/test_indexed.py::test_differentiation
 wrong      sympy/vector/tests/test_printing.py::test_issue_23058
