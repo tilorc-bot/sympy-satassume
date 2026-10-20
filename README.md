@@ -60,8 +60,13 @@ How it works (`sympy/assumptions/backends/`):
   (`refine`, the handlers, matrices, ...) goes through it.
 - Old system: the module function `sympy.core.assumptions._ask`, which every
   `is_*` property calls on a miss of the object's cache, is replaced. The
-  backend's answer is stored in the cache of the object; nothing else is
-  deduced from it.
+  backend's answer is stored in the cache of the object together with its
+  implications, as SymPy's own code stores its answers (SymPy's code, which
+  answers the nested queries, skips stored facts and so cannot deduce from
+  them). So the facts it implies are then answered by SymPy's rules instead
+  of the backend. An answer that SymPy's rules find inconsistent with a
+  stored fact is stored without its implications (a None answer then keeps
+  the stored value).
 - Re-entrancy: while a backend runs, every query it makes in turn (satassume
   reads facts of numbers through `is_*`; sympy-extras calls `sympy.ask`) is
   answered by SymPy's own code.
