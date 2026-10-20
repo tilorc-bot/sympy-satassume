@@ -2,9 +2,10 @@
 
 satassume (https://github.com/tilorc-bot/satassume) is a SAT (CDCL) based
 engine for ``ask``. Its answer is returned as it is: ``None`` for a query it
-cannot decide. A query outside its scope (matrix predicates, for instance,
-see ``satassume.sympy_api.out_of_scope``) that it answers ``None`` is
-answered by SymPy's own ``ask``.
+cannot decide. A query that it answers ``None`` and that
+``satassume.sympy_api.out_of_scope`` gives a category (a relation, a matrix or
+custom predicate, in the proposition or the assumptions) is answered by
+SymPy's own ``ask``.
 """
 from __future__ import annotations
 

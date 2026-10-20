@@ -20,8 +20,10 @@ code. It is a module that may define
 A system whose function the backend does not define stays with SymPy's own
 code. The answer of the backend is returned as it is, ``None`` included;
 there is no fallback to SymPy's code unless the backend returns
-``NotImplemented``. The satassume backend does that for a query outside the
-scope of satassume (matrix predicates, for instance) that it answers ``None``.
+``NotImplemented``. The satassume backend does that for a query that
+satassume answers ``None`` and that ``satassume.sympy_api.out_of_scope`` gives
+a category (a relation, a matrix or custom predicate, in the proposition or the
+assumptions).
 
 The backend is chosen when ``sympy`` is imported, from the environment
 variable ``SYMPY_ASSUMPTIONS_BACKEND``:

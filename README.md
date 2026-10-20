@@ -8,9 +8,10 @@ pluggable **backend**. The default backend is
 [satassume](https://github.com/tilorc-bot/satassume), a SAT (CDCL) based
 engine, which replaces **both** assumption systems, with **no fallback** to
 SymPy's own code: its answer is returned as it is, `None` included. The one
-exception: a query of the new system outside the scope of satassume (matrix
-predicates, for instance; `satassume.sympy_api.out_of_scope`) that satassume
-answers `None` is answered by SymPy's own `ask`.
+exception: a query of the new system that satassume answers `None` and that
+`satassume.sympy_api.out_of_scope` gives a category (a relation, a matrix or
+custom predicate, in the proposition or the assumptions) is answered by
+SymPy's own `ask`.
 
 It is an experiment, not a SymPy release, and it is not affiliated with the
 SymPy project. The package is still imported as `sympy`.
@@ -64,7 +65,9 @@ How it works (`sympy/assumptions/backends/`):
   returns `NotImplemented` leaves the query to SymPy's code: the satassume
   backend does so when satassume answers `None` and
   `satassume.sympy_api.out_of_scope` gives a category (`relation`, `matrix`,
-  `custom` or `other`) for the query.
+  `custom` or `other`) for the query. That includes every query with a
+  relation (even one that satassume's theories interpret) and matrix or
+  custom predicates that appear only in the assumptions.
 - Old system: the module function `sympy.core.assumptions._ask`, which every
   `is_*` property calls on a miss of the object's cache, is replaced. The
   backend's answer is stored in the cache of the object together with its
@@ -159,6 +162,8 @@ satassume, 48 for sympy_extras):
 - Measured again on 2026-10-20 with satassume `93a612e` and 194 entries
   (satassume backend, `-n 8`, 1178 s): 13078 passed, 0 failed, 518 xfailed
   (194 listed + 324 upstream), 7 xpassed (upstream), 731 skipped, of 14334.
+  `test_pow_im` passed (in this run and in the runs of the listed ids), so
+  it is no longer listed.
 - With the `sympy` backend the results are those of upstream SymPy at
   `751a370` (the same run of upstream without this change, in the
   experiment, gave the same outcome for every test; this copy adds the 3
