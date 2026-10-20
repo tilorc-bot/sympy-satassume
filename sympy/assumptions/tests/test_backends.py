@@ -11,6 +11,7 @@ from sympy.core.relational import Gt, is_eq
 from sympy.core.singleton import S
 from sympy.core.symbol import Dummy, Symbol
 from sympy.external import import_module
+from sympy.matrices.expressions.matexpr import MatrixSymbol
 from sympy.testing.pytest import skip
 
 sympy_extras = import_module('sympy_extras')
@@ -81,6 +82,22 @@ def test_assumptions_wrapper_uses_sympy_code():
     assert AssumptionsWrapper(y, Q.even(y)).is_integer is True
     x = Symbol('x')
     assert is_eq(x, S.Zero, assumptions=Q.zero(x)) is True
+
+
+def test_satassume_out_of_scope_uses_sympy_code():
+    # satassume answers None to a query outside its scope; the backend
+    # leaves such a query to SymPy's own ask (satassume#180 S3).
+    X = MatrixSymbol('X', 2, 2)
+    assert ask(Q.invertible(X), Q.fullrank(X) & Q.square(X)) is True
+    assert ask(Q.symmetric(X * X.T)) is True
+    if active_backends()['new'] != 'satassume':
+        return
+    from sympy.assumptions.backends.satassume import ask as backend_ask
+    x = Symbol('x')
+    assert backend_ask(Q.invertible(X), Q.fullrank(X) & Q.square(X)) is NotImplemented
+    # An in-scope query keeps satassume's answer, None included.
+    assert backend_ask(Q.positive(x), Q.real(x)) is None
+    assert backend_ask(Q.positive(x), Q.positive(x)) is True
 
 
 def test_sympy_extras_statements():
