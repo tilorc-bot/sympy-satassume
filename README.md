@@ -146,8 +146,8 @@ or, from a clone, `pip install -e .` (or `-e '.[sympy_extras]'`).
 
 Pinned dependencies (`setup.py`):
 
-- satassume `6f50449caeafab2b4443bfb5d4a71f881e83fd0e` (a dependency:
-  `satassume @ git+https://github.com/tilorc-bot/satassume@6f50449...`);
+- satassume `f9291ab829f785f1c59e6ec5cbd421a29c6c6ab4` (a dependency:
+  `satassume @ git+https://github.com/tilorc-bot/satassume@f9291ab...`);
 - sympy-extras `ae8f9f6c959111413c2fbe0675ce76e52e4d7502` (the optional extra
   `sympy_extras`).
 
@@ -221,6 +221,15 @@ satassume, 48 for sympy_extras):
   15-18 on 12 CPUs): run alone, they take 8 s and 39 s, the same at the
   old pin and without the class-level change. Every listed id still fails,
   so the list is unchanged (197 entries).
+- Measured again on 2026-10-21 with satassume `f9291ab` (#244: each
+  argument of a parity connective is encoded once, #245: a unary function
+  keeps level 2 only for a swept SymPy class), `-n 16`, with
+  `--no-backend-xfails`, and the `sympy` backend run the same way just
+  before it: satassume 13077 passed, 197 failed (exactly the listed ids),
+  324 xfailed and 7 xpassed (upstream), 735 skipped, of 14340, 895 s;
+  `sympy` 13274 passed, 0 failed, 798 s. A run at `6f50449` in the same
+  conditions failed the same 197 ids (916 s, partly on a loaded host), so
+  the list is unchanged (197 entries).
 - With the `sympy` backend the results are those of upstream SymPy at
   `751a370` (the same run of upstream without this change, in the
   experiment, gave the same outcome for every test; this copy adds the 3
