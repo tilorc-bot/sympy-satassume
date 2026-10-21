@@ -77,6 +77,15 @@ How it works (`sympy/assumptions/backends/`):
   of the backend. An answer that SymPy's rules find inconsistent with a
   stored fact is stored without its implications (a None answer then keeps
   the stored value).
+- Old system, class-level facts: SymPy turns the facts it derives from a
+  class's explicit `is_commutative = False` alone (`Commutator.is_zero =
+  False`, `is_integer`, `is_complex`, ...) into class attributes and
+  default facts, so they are answered without `_ask`. They describe how
+  the object is built, not its value: `Commutator(b - b, a)` is 0, so the
+  backend must decide them. While a backend answers the old system, each
+  such fact of each class (those defined so far and every class defined
+  later) is removed from the class's default facts. It is turned back into
+  a property that asks, and `commutative` stays a class attribute.
 - Re-entrancy: while a backend runs, every query it makes in turn (satassume
   reads facts of numbers through `is_*`; sympy-extras calls `sympy.ask`) is
   answered by SymPy's own code.
@@ -100,6 +109,13 @@ How it works (`sympy/assumptions/backends/`):
 The change to SymPy itself is small: `sympy/assumptions/backends/` (new),
 a hook of a few lines in `sympy/assumptions/ask.py`, 3 lines at the end of
 `sympy/__init__.py`, the xfail hook in `conftest.py`, and `setup.py`.
+One fix in SymPy's own handlers comes with it: the number handlers of
+`sympy/assumptions/handlers/order.py` and `sets.py` take an `evalf` result
+that is no Number (no `_prec`, as for `Operator(1)`, whose `is_number` is
+True) as unevaluated, and so answer None instead of raising
+`AttributeError`. Upstream raises too wherever `Q.real` is not False
+(`ask(Q.nonzero(Operator(pi)**2))`); for `Operator(1)` the class-level
+facts of non-commutative classes made it False.
 
 ## Installation
 
@@ -112,8 +128,8 @@ or, from a clone, `pip install -e .` (or `-e '.[sympy_extras]'`).
 
 Pinned dependencies (`setup.py`):
 
-- satassume `92f4bf4b7726c5c34e7d16ce92325b701da3d42a` (a dependency:
-  `satassume @ git+https://github.com/tilorc-bot/satassume@92f4bf4...`);
+- satassume `6f50449caeafab2b4443bfb5d4a71f881e83fd0e` (a dependency:
+  `satassume @ git+https://github.com/tilorc-bot/satassume@6f50449...`);
 - sympy-extras `ae8f9f6c959111413c2fbe0675ce76e52e4d7502` (the optional extra
   `sympy_extras`).
 
@@ -176,6 +192,17 @@ satassume, 48 for sympy_extras):
   satassume backend, `-n 8`, 1225 s): 13076 passed, 0 failed, 521 xfailed
   (197 listed + 324 upstream), 7 xpassed (upstream), 731 skipped, of 14335.
   Every listed id still fails, so the list is unchanged (197 entries).
+- Measured again on 2026-10-21 with satassume `6f50449` (#236: the nan
+  guard follows every argument that carries a value, #238: level 2 only
+  for a matrix or a plain undefined function) and the backend answering
+  the class-level implications of `is_commutative = False` (satassume
+  backend, `-n 8`, 3281 s on a loaded host): 13075 passed, 0 failed, 521
+  xfailed (197 listed + 324 upstream), 7 xpassed (upstream), 731 skipped,
+  2 timeouts, of 14336. The timeouts (`test_limits.py::test_issue_17431`,
+  `test_recurr.py::test_issue_17990`) come from host load (load average
+  15-18 on 12 CPUs): run alone, they take 8 s and 39 s, the same at the
+  old pin and without the class-level change. Every listed id still fails,
+  so the list is unchanged (197 entries).
 - With the `sympy` backend the results are those of upstream SymPy at
   `751a370` (the same run of upstream without this change, in the
   experiment, gave the same outcome for every test; this copy adds the 3

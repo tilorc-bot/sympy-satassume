@@ -4,8 +4,12 @@ import os
 from sympy.assumptions.ask import Q, ask
 from sympy.assumptions.wrapper import AssumptionsWrapper
 from sympy.assumptions.backends import (BACKENDS, DEFAULT_BACKEND, _state,
-                                        _wrap_is, active_backends)
+                                        _ask_commutative_implications,
+                                        _commutative_implications, _wrap_is,
+                                        active_backends)
 from sympy.core.cache import clear_cache
+from sympy.core.expr import Expr
+from sympy.core.add import Add
 from sympy.core.mul import Mul
 from sympy.core.numbers import Integer
 from sympy.core.relational import Gt, is_eq
@@ -93,6 +97,55 @@ def test_backend_commutative_false_not_stored():
         assert e.doit() == 0
 
 
+def test_class_commutative_false_implications_asked():
+    # re-review R3: SymPy derives zero=False, complex=False, ... from a
+    # class's is_commutative = False and puts them in the class dict, where
+    # reading them never calls _ask; an old-system backend answers them.
+    class NC(Expr):
+        is_commutative = False
+
+    class NCReal(Expr):
+        is_commutative = False
+        is_complex = False  # declared: it and its implications are kept
+
+    class Sub(NC):
+        pass
+
+    for cls in (NC, NCReal, Sub):
+        _ask_commutative_implications(cls)
+    assert NC.is_commutative is False
+    assert isinstance(NC.__dict__['is_zero'], property)
+    assert 'zero' not in NC.default_assumptions
+    assert 'commutative' not in NC.default_assumptions
+    assert _commutative_implications(NC) == []
+    assert NCReal.is_complex is False and NCReal.is_zero is False
+    assert isinstance(Sub.__dict__['is_integer'], property)
+    e = NC()
+    # an instance's own copy of the default facts derives none of them
+    e._assumptions = e.default_assumptions.copy()
+    assert 'zero' not in e._assumptions
+    if active_backends()['old'] == 'sympy':
+        return
+    from sympy.physics.quantum import AntiCommutator, Commutator, Dagger, Operator
+    from sympy.physics.quantum.fermion import FermionOp
+    # classes defined after the backend was installed
+    class Late(Expr):
+        is_commutative = False
+    for cls in (Commutator, Late):
+        assert isinstance(cls.__dict__['is_zero'], property), cls
+    a, b = Operator('a'), Operator('b')
+    e = Commutator(Add(b, -b, evaluate=False), a)
+    assert type(e) is Commutator and e.doit() == 0
+    assert e.is_commutative is False
+    if active_backends()['old'] == 'satassume':
+        assert e.is_zero is None
+        d = FermionOp('d')
+        e = AntiCommutator(d, Dagger(d))
+        assert e.doit() == 1
+        assert e.is_integer is None and e.is_complex is None
+        assert MatrixSymbol('M', 2, 2).is_zero is False
+
+
 def test_assumptions_wrapper_uses_sympy_code():
     # AssumptionsWrapper.is_* ask the new system under the wrapper's
     # assumptions, which an old-system backend never sees (#180 S6).
@@ -134,3 +187,24 @@ def test_sympy_extras_statements():
     assert to_statement(Q.prime(x)) is None
     assert to_statement(Q.positive(x) | Q.prime(x)) is None
     assert to_statement(Q.prime(x), keep=True) == Q.prime(x)
+
+
+def test_number_handlers_non_number_evalf():
+    # PR #8 review: a non-commutative term with number arguments has
+    # is_number True, but evalf leaves it no Number (no _prec); with its
+    # class-level real = False asked of the backend, the handlers reach
+    # evalf: None, not AttributeError (with every backend)
+    from sympy.functions.elementary.complexes import Abs
+    from sympy.assumptions.refine import refine
+    from sympy.physics.quantum import Commutator, Operator
+    from sympy.physics.secondquant import F
+    if active_backends()['new'] == 'sympy_extras':
+        # it answers ask and refine itself, and its time limit fails on
+        # this SymPy (sympy-satassume#9)
+        skip('the handlers are not reached with sympy_extras')
+    x = Symbol('x')
+    for e in (Operator(1), F(1), Commutator(Operator(1), Operator(2)), Operator(S.Pi)**2):
+        for p in (Q.zero, Q.nonzero, Q.positive, Q.negative, Q.real, Q.imaginary):
+            assert ask(p(e)) in (None, False), (e, p)
+        refine(Abs(e))
+        AssumptionsWrapper(e, Q.positive(x)).is_zero
