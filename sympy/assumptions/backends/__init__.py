@@ -56,6 +56,8 @@ from __future__ import annotations
 import importlib
 import os
 
+from sympy.core.assumptions import StdFactKB, as_property, make_property
+from sympy.core.basic import Basic
 from sympy.core.facts import InconsistentAssumptions
 
 __all__ = ['BACKENDS', 'DEFAULT_BACKEND', 'active_backends', 'xfail_key']
@@ -163,6 +165,57 @@ def _wrap_is(backend_is, sympy_ask, own=()):
     return _ask
 
 
+def _commutative_implications(cls):
+    """The facts SymPy derives for the class ``cls`` from an explicit
+    ``is_commutative = False`` alone: those of ``cls.default_assumptions``
+    that neither ``cls`` (or a base) declares nor the other declared facts
+    imply (``Commutator.is_zero = False``)."""
+    defs = getattr(cls, '_explicit_class_assumptions', None)
+    if not defs or defs.get('commutative') is not False:
+        return []
+    rest = StdFactKB({k: v for k, v in defs.items() if k != 'commutative'})
+    return [k for k in cls.default_assumptions
+            if k != 'commutative' and k not in defs and k not in rest]
+
+
+def _ask_commutative_implications(cls, own=()):
+    """Let the backend answer the class-level implications of
+    ``is_commutative = False`` (:func:`_commutative_implications`), as
+    :func:`_wrap_is` does for an instance's answer: that is a fact of how
+    an object is built, not of its value (``Commutator(b - b, a)`` is 0),
+    so they are no default facts and no class attributes but properties
+    that ask (re-review R3).  ``commutative`` itself stays a class
+    attribute, but leaves the default facts too: an instance's facts start
+    as their copy, and a copy of a ``StdFactKB`` deduces its facts again.
+    """
+    if issubclass(cls, own):
+        return
+    implied = _commutative_implications(cls)
+    for fact in implied:
+        dict.__delitem__(cls.default_assumptions, fact)
+        if isinstance(cls.__dict__.get(as_property(fact)), bool):
+            setattr(cls, as_property(fact), make_property(fact))
+    if implied:
+        dict.__delitem__(cls.default_assumptions, 'commutative')
+
+
+def _prepare_classes(prepare, own):
+    """``_prepare_class_assumptions`` followed by
+    :func:`_ask_commutative_implications`, for the classes defined from now
+    on; the classes defined so far are done here."""
+    def prepare_class(cls):
+        prepare(cls)
+        _ask_commutative_implications(cls, own)
+    seen, todo = set(), [Basic]
+    while todo:
+        cls = todo.pop()
+        if cls not in seen:
+            seen.add(cls)
+            _ask_commutative_implications(cls, own)
+            todo.extend(cls.__subclasses__())
+    return prepare_class
+
+
 def _load(name):
     try:
         module = importlib.import_module(BACKENDS[name])
@@ -197,8 +250,13 @@ def _install():
             names[system] = 'sympy'
     if _state['old'] is not None:
         wrapper = importlib.import_module('sympy.assumptions.wrapper')
-        core_assumptions._ask = _wrap_is(_state['old'], core_assumptions._ask,
-                                         (wrapper.AssumptionsWrapper,))
+        own = (wrapper.AssumptionsWrapper,)
+        core_assumptions._ask = _wrap_is(_state['old'], core_assumptions._ask, own)
+        # both callers: Basic.__init_subclass__ and ManagedProperties
+        basic = importlib.import_module('sympy.core.basic')
+        basic._prepare_class_assumptions = _prepare_classes(
+            core_assumptions._prepare_class_assumptions, own)
+        core_assumptions._prepare_class_assumptions = basic._prepare_class_assumptions
     if _state['new'] is not None:
         ask_module._backend_ask = _wrap_ask(_state['new'])
     _state['names'] = names
