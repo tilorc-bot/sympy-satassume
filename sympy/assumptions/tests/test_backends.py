@@ -198,12 +198,13 @@ def test_number_handlers_non_number_evalf():
     from sympy.assumptions.refine import refine
     from sympy.physics.quantum import Commutator, Operator
     from sympy.physics.secondquant import F
+    if active_backends()['new'] == 'sympy_extras':
+        # it answers ask and refine itself, and its time limit fails on
+        # this SymPy (sympy-satassume#9)
+        skip('the handlers are not reached with sympy_extras')
     x = Symbol('x')
-    # sympy-extras answers ask itself (and its time limit fails on this
-    # SymPy: sympy-satassume#9)
-    handlers = active_backends()['new'] != 'sympy_extras'
     for e in (Operator(1), F(1), Commutator(Operator(1), Operator(2)), Operator(S.Pi)**2):
         for p in (Q.zero, Q.nonzero, Q.positive, Q.negative, Q.real, Q.imaginary):
-            assert not handlers or ask(p(e)) in (None, False), (e, p)
+            assert ask(p(e)) in (None, False), (e, p)
         refine(Abs(e))
         AssumptionsWrapper(e, Q.positive(x)).is_zero
