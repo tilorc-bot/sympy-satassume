@@ -36,6 +36,8 @@
 # Then, at pin 6f50449 (satassume #236, #238, and the backend answering the
 # class-level implications of is_commutative = False): no change, every
 # entry still fails and nothing else does (2 timeouts from host load).
+# Then, at pin f9291ab (satassume #244, #245): no change, every entry still
+# fails and nothing else does.
 # An entry without "::" is a module whose collection fails: its collection
 # error is reported as a skip.
 # Tag counts (197): none 73, wrong 85, extra 28, agree 7, unrecorded 3, assert 1

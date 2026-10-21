@@ -328,7 +328,7 @@ if __name__ == '__main__':
           install_requires=[
               'mpmath >= 1.1.0',
               'satassume @ git+https://github.com/tilorc-bot/satassume'
-              '@6f50449caeafab2b4443bfb5d4a71f881e83fd0e',
+              '@f9291ab829f785f1c59e6ec5cbd421a29c6c6ab4',
           ],
           py_modules=['isympy'],
           packages=['sympy'] + modules + tests,
