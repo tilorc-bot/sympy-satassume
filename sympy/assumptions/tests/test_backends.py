@@ -11,14 +11,18 @@ from sympy.core.cache import clear_cache
 from sympy.core.expr import Expr
 from sympy.core.add import Add
 from sympy.core.mul import Mul
-from sympy.core.numbers import Integer
+from sympy.core.numbers import Integer, pi
 from sympy.core.relational import Gt, is_eq
 from sympy.core.singleton import S
 from sympy.core.symbol import Dummy, Symbol
 from sympy.external import import_module
+from sympy.functions.elementary.complexes import Abs
+from sympy.functions.elementary.exponential import exp, log
+from sympy.functions.elementary.miscellaneous import sqrt
 from sympy.functions.elementary.trigonometric import sin
+from sympy.integrals.integrals import Integral
 from sympy.matrices.expressions.matexpr import MatrixSymbol
-from sympy.testing.pytest import skip
+from sympy.testing.pytest import raises, skip
 
 sympy_extras = import_module('sympy_extras')
 
@@ -60,18 +64,77 @@ def test_backend_answers_stored_with_deductions():
 
 
 def test_backend_answer_inconsistent_with_stored_facts():
-    # Such an answer is stored without its implications, and a None answer
-    # keeps the stored value.
+    # One of the two is wrong: the answer is None, the stored facts are
+    # kept (sympy-satassume#10).
     answers = {'negative': True, 'positive': None}
     _ask = _wrap_is(lambda obj, fact: answers[fact], None)
     p = Symbol('p')
+    # p's own facts: those of Symbol('p') are shared by all plain symbols
+    p._assumptions = p._assumptions.copy()
     dict.__setitem__(p._assumptions, 'positive', True)  # stored alone
     before = dict(p._assumptions)
-    assert _ask('negative', p) is True
-    assert _ask('positive', p) is None
+    assert _ask('negative', p) is None
     after = dict(p._assumptions)
-    assert after.pop('negative') is True
+    assert after.pop('negative') is None
     assert after == before
+    assert _ask('positive', p) is None
+
+
+def test_facts_of_nested_queries_removed():
+    # While a backend runs, the queries it makes are answered by SymPy's
+    # code, which stores its answers in the facts of the objects.  They are
+    # removed when the backend returns: else a later query would read them,
+    # and the answer would depend on the queries made before; also no
+    # answer of the backend is stored with implications drawn from them
+    # (sympy-satassume#10: 1/log(Abs(e)) positive for an even e).
+    def sympy_ask(fact, obj):
+        obj._assumptions.deduce_all_facts(((fact, False),))
+        return False
+
+    def backend_is(obj, fact):
+        assert _ask('zero', obj) is False  # SymPy's code, stored on obj
+        assert _ask('zero', b) is False
+        assert b._assumptions['zero'] is False
+        if fact == 'error':
+            raise ValueError
+        return True
+
+    _ask = _wrap_is(backend_is, sympy_ask)
+    a, b = Expr(), Expr()
+    for obj in (a, b):
+        obj._assumptions = obj.default_assumptions.copy()
+    b_facts = dict(b._assumptions)
+    assert _ask('nonnegative', a) is True
+    assert a._assumptions['nonnegative'] is True
+    assert a._assumptions['negative'] is False
+    assert 'zero' not in a._assumptions
+    assert 'positive' not in a._assumptions  # nonnegative & ~zero
+    assert dict(b._assumptions) == b_facts
+    a_facts = dict(a._assumptions)
+    raises(ValueError, lambda: _ask('error', a))
+    assert dict(a._assumptions) == a_facts
+    assert dict(b._assumptions) == b_facts
+    assert _state['depth'] == 0 and _state['saved'] is None
+
+
+def test_satassume_answer_not_from_nested_query():
+    # sympy-satassume#10: with SymPy's code answering the queries made
+    # while satassume answers these, w.is_positive was True and
+    # exp(y).is_zero False (wrong for e = 0 and y = -oo), and the answers
+    # depended on which query came first.
+    if active_backends()['old'] != 'satassume':
+        return
+    x, y = Symbol('x'), Symbol('y')
+    e = Symbol('e', even=True)
+    for query in (lambda f: f.is_zero, lambda f: ask(Q.zero(f))):
+        clear_cache()
+        w = 1/log(Abs(e))
+        query(Integral(sqrt(pi*w/2 + x), (x, 0, 1)))
+        assert w.is_nonnegative is True
+        assert w.is_positive is None
+        clear_cache()
+        query(Integral(log(exp(y) + x), (x, 0, 1)))
+        assert exp(y).is_zero is None
 
 
 def test_backend_commutative_false_not_stored():

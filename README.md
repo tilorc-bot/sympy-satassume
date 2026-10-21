@@ -75,8 +75,8 @@ How it works (`sympy/assumptions/backends/`):
   answers the nested queries, skips stored facts and so cannot deduce from
   them). So the facts it implies are then answered by SymPy's rules instead
   of the backend. An answer that SymPy's rules find inconsistent with a
-  stored fact is stored without its implications (a None answer then keeps
-  the stored value).
+  stored fact (one of the two is wrong) is `None`, and the stored facts are
+  kept.
 - Old system, class-level facts: SymPy turns the facts it derives from a
   class's explicit `is_commutative = False` alone (`Commutator.is_zero =
   False`, `is_integer`, `is_complex`, ...) into class attributes and
@@ -88,7 +88,19 @@ How it works (`sympy/assumptions/backends/`):
   a property that asks, and `commutative` stays a class attribute.
 - Re-entrancy: while a backend runs, every query it makes in turn (satassume
   reads facts of numbers through `is_*`; sympy-extras calls `sympy.ask`) is
-  answered by SymPy's own code.
+  answered by SymPy's own code. That code stores its answers in the caches
+  of the objects (`obj._assumptions`, through `_ask`, the only place where
+  it writes them after construction); each cache it writes to is saved
+  first and put back when the backend returns (sympy-satassume#10). So an
+  `is_*` answer does not depend on the queries made before it: a cached
+  fact is a fact given at construction (a symbol's assumptions, a class's
+  default facts), an answer of the backend, or implied by these, never an
+  answer of SymPy's code that outlived the backend query (before,
+  `w.is_positive` with `w = 1/log(Abs(e))`, `e` even, was True, wrong for
+  `e = 0`, after a query on an `Integral` of `w`). Results of construction
+  that `cacheit` keeps are not undone: a constructor run inside the
+  backend evaluates with SymPy's answers, as it does outside with the
+  backend's.
 - `sympy_extras` translates each `Q` predicate to a statement of sympy-extras
   (`Q.positive(x)` to `x > 0`, `Q.integer(x)` to
   `Contains(x, Integers)`, `Q.even(x)` to `Contains(x/2, Integers)`, `Q.gt(x, y)`

@@ -38,8 +38,15 @@ choose the backend of one system only.
 
 While a backend runs, any query it makes in turn (for instance a backend
 reading ``x.is_positive`` of a symbol, or calling ``sympy.ask``) is answered
-by SymPy's own code. Until ``sympy`` has finished importing, SymPy's own code
-answers every query. The ``is_*`` properties of
+by SymPy's own code. The facts that this code stores in the caches of objects
+meanwhile (``obj._assumptions``) are removed when the backend returns: a later
+``is_*`` query is answered by the backend, not from a fact of SymPy's code
+that outlived the query, so an answer does not depend on which queries ran
+before it (sympy-satassume#10). An answer of the backend to ``expr.is_<fact>``
+is stored in the cache of ``expr`` with its implications; one that
+contradicts a fact stored there is ``None``, as one of the two is wrong.
+Until ``sympy`` has finished importing, SymPy's own code answers every query.
+The ``is_*`` properties of
 :class:`~sympy.assumptions.wrapper.AssumptionsWrapper` always use SymPy's own
 code: they ask the new system (so its backend) under the assumptions of the
 wrapper.
@@ -75,7 +82,9 @@ _ENV = 'SYMPY_ASSUMPTIONS_BACKEND'
 
 # The backend function of each system once installed, and the depth of the
 # backend calls running: a query made while a backend runs uses SymPy's code.
-_state = {'old': None, 'new': None, 'names': None, 'depth': 0}
+# While one runs, 'saved' maps id(kb) to (kb, its facts) for each fact base
+# that SymPy's code may write to: they are put back when the backend returns.
+_state = {'old': None, 'new': None, 'names': None, 'depth': 0, 'saved': None}
 
 
 def _requested(system=None):
@@ -114,15 +123,31 @@ def xfail_key():
     return _requested() or DEFAULT_BACKEND
 
 
+def _run(backend_function, *args):
+    """``backend_function(*args)``, the queries it makes in turn answered by
+    SymPy's code (see ``_wrap_is``).  The facts that this code stores in the
+    caches of objects meanwhile are SymPy's answers, not the backend's: they
+    are removed when the backend returns, else a later query would read them
+    from the cache, and the answer would depend on the queries made before
+    (sympy-satassume#10)."""
+    saved = {}
+    _state['saved'] = saved
+    _state['depth'] += 1
+    try:
+        return backend_function(*args)
+    finally:
+        _state['depth'] -= 1
+        _state['saved'] = None
+        for kb, facts in saved.values():
+            dict.clear(kb)
+            dict.update(kb, facts)
+
+
 def _wrap_ask(backend_ask):
     def ask(proposition, assumptions):
         if _state['depth']:
             return NotImplemented
-        _state['depth'] += 1
-        try:
-            return backend_ask(proposition, assumptions)
-        finally:
-            _state['depth'] -= 1
+        return _run(backend_ask, proposition, assumptions)
     return ask
 
 
@@ -132,13 +157,16 @@ def _wrap_is(backend_is, sympy_ask, own=()):
     ``_eval_is_*`` methods are the answer (``AssumptionsWrapper`` asks the
     new system under its own assumptions, which ``backend_is`` never sees)."""
     def _ask(fact, obj):
-        if _state['depth'] or isinstance(obj, own):
+        if _state['depth']:
+            # SymPy's code writes only to obj's facts (sympy.core.assumptions
+            # _ask), and every nested read of a fact not stored comes here.
+            saved, kb = _state['saved'], obj._assumptions
+            if saved is not None and id(kb) not in saved:
+                saved[id(kb)] = (kb, dict(kb))
             return sympy_ask(fact, obj)
-        _state['depth'] += 1
-        try:
-            answer = backend_is(obj, fact)
-        finally:
-            _state['depth'] -= 1
+        if isinstance(obj, own):
+            return sympy_ask(fact, obj)
+        answer = _run(backend_is, obj, fact)
         kb = obj._assumptions
         if fact == 'commutative' and answer is False:
             # A fact of how obj is built, not of its value: Mul(0, A,
@@ -155,12 +183,14 @@ def _wrap_is(backend_is, sympy_ask, own=()):
         try:
             kb.deduce_all_facts(((fact, answer),))
         except InconsistentAssumptions:
-            # Undo the implications stored before the conflict; store the
-            # answer alone, unless it is None and a value is known.
+            # The answer contradicts a fact stored on obj (one stored at its
+            # construction, or an earlier answer of the backend), so one of
+            # the two is wrong: answer None, and keep the stored facts.
             dict.clear(kb)
             dict.update(kb, saved)
-            if answer is not None:
-                dict.__setitem__(kb, fact, answer)
+            if fact not in kb:
+                dict.__setitem__(kb, fact, None)
+            return None
         return answer
     return _ask
 
