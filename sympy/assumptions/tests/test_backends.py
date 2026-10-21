@@ -241,6 +241,39 @@ def test_satassume_out_of_scope_uses_sympy_code():
     assert backend_ask(Q.positive(x), Q.positive(x)) is True
 
 
+def test_satassume_out_of_scope_assumptions_only():
+    # sympy-satassume#11: with only the assumptions out of scope, SymPy's
+    # answer is taken only if it depends on them.  SymPy's own ask decides
+    # these without Q.invertible(M), wrongly (each term is nan), where
+    # satassume answers None.
+    if active_backends()['new'] != 'satassume':
+        return
+    M = MatrixSymbol('M', 2, 2)
+    a = Mul(0, S.Infinity, evaluate=False)
+    b = Add(S.Infinity, S.NegativeInfinity, evaluate=False)
+    c = exp(a, evaluate=False)
+    for p in (Q.zero(a), Q.finite(a), Q.extended_real(b), Q.positive(c)):
+        assert ask(p, Q.invertible(M)) is None
+    # the in-scope assumptions decide it: satassume's answer
+    x = Symbol('x')
+    assert ask(Q.positive(x), Q.invertible(M) & Q.positive(x)) is True
+    # SymPy's code undecided without the assumptions out of scope: the
+    # query goes to SymPy's ask, which may use them
+    from sympy.assumptions.backends import satassume as backend
+    asked = []
+
+    def sympy_ask(proposition, assumptions, context):
+        asked.append(assumptions)
+        return None
+    old, backend.sympy_ask = backend.sympy_ask, sympy_ask
+    try:
+        assert backend.ask(Q.zero(a), Q.invertible(M) & Q.real(x)
+                           ) is NotImplemented
+    finally:
+        backend.sympy_ask = old
+    assert asked == [Q.real(x)]
+
+
 def test_sympy_extras_statements():
     if not sympy_extras:
         skip('sympy_extras is not installed')
