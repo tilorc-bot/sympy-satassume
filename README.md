@@ -67,7 +67,13 @@ How it works (`sympy/assumptions/backends/`):
   `satassume.sympy_api.out_of_scope` gives a category (`relation`, `matrix`,
   `custom` or `other`) for the query. That includes every query with a
   relation (even one that satassume's theories interpret) and matrix or
-  custom predicates that appear only in the assumptions.
+  custom predicates that appear only in the assumptions. When only the
+  assumptions are out of scope, SymPy's code first answers the query under
+  their in-scope conjuncts: if it is definite there, satassume's `None`
+  stands, as SymPy's answer does not use the facts satassume cannot read
+  (it was wrong for nan-valued terms: `ask(Q.zero(Mul(0, oo,
+  evaluate=False)), Q.invertible(M))` was True, sympy-satassume#11); only
+  if not does SymPy answer the query with all the assumptions.
 - Old system: the module function `sympy.core.assumptions._ask`, which every
   `is_*` property calls on a miss of the object's cache, is replaced. The
   backend's answer is stored in the cache of the object together with its
