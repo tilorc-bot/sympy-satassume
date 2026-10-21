@@ -32,6 +32,9 @@
 # test_delta.py deltaproduct tests (lost with #225's level-2 restriction).
 # An entry without "::" is a module whose collection fails: its collection
 # error is reported as a skip.
+# Then, at pin 92f4bf4 (satassume #233, #235: answers given up for
+# soundness, regressions #232 and #231): no change, every entry still fails
+# and nothing else does.
 # Tag counts (197): none 73, wrong 85, extra 28, agree 7, unrecorded 3, assert 1
 #
 # Tags (the cause of the failure):

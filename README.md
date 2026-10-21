@@ -112,8 +112,8 @@ or, from a clone, `pip install -e .` (or `-e '.[sympy_extras]'`).
 
 Pinned dependencies (`setup.py`):
 
-- satassume `b26f1742c88972903d03b05a86bc3d05cdb45473` (a dependency:
-  `satassume @ git+https://github.com/tilorc-bot/satassume@b26f174...`);
+- satassume `92f4bf4b7726c5c34e7d16ce92325b701da3d42a` (a dependency:
+  `satassume @ git+https://github.com/tilorc-bot/satassume@92f4bf4...`);
 - sympy-extras `ae8f9f6c959111413c2fbe0675ce76e52e4d7502` (the optional extra
   `sympy_extras`).
 
@@ -170,6 +170,12 @@ satassume, 48 for sympy_extras):
   deltaproduct tests, answers given up for soundness; listed since, 197
   entries), 518 xfailed (194 listed + 324 upstream), 7 xpassed (upstream),
   731 skipped, of 14335.
+- Measured again on 2026-10-21 with satassume `92f4bf4` (#233: level-2
+  commutativity only over terms commutative by construction, #235: no
+  template fact at an argument holding an explicit nan or infinity;
+  satassume backend, `-n 8`, 1225 s): 13076 passed, 0 failed, 521 xfailed
+  (197 listed + 324 upstream), 7 xpassed (upstream), 731 skipped, of 14335.
+  Every listed id still fails, so the list is unchanged (197 entries).
 - With the `sympy` backend the results are those of upstream SymPy at
   `751a370` (the same run of upstream without this change, in the
   experiment, gave the same outcome for every test; this copy adds the 3
