@@ -35,15 +35,15 @@ def _NegativePredicate_number(expr, assumptions):
     # we make the comparison between the real part and zero.
     if not i:
         r = r.evalf(2)
-        if r._prec != 1:
+        if getattr(r, "_prec", 1) != 1:
             return r < 0
     else:
         i = i.evalf(2)
-        if i._prec != 1:
+        if getattr(i, "_prec", 1) != 1:
             if i != 0:
                 return False
             r = r.evalf(2)
-            if r._prec != 1:
+            if getattr(r, "_prec", 1) != 1:
                 return r < 0
 
 @NegativePredicate.register(Basic)
@@ -169,7 +169,7 @@ def _(expr, assumptions):
         # if there are no symbols just evalf
         i = expr.evalf(2)
         def nonz(i):
-            if i._prec != 1:
+            if getattr(i, "_prec", 1) != 1:
                 return i != 0
         return fuzzy_or(nonz(i) for i in i.as_real_imag())
 
@@ -256,15 +256,15 @@ def _PositivePredicate_number(expr, assumptions):
     # we make the comparison between the real part and zero.
     if not i:
         r = r.evalf(2)
-        if r._prec != 1:
+        if getattr(r, "_prec", 1) != 1:
             return r > 0
     else:
         i = i.evalf(2)
-        if i._prec != 1:
+        if getattr(i, "_prec", 1) != 1:
             if i != 0:
                 return False
             r = r.evalf(2)
-            if r._prec != 1:
+            if getattr(r, "_prec", 1) != 1:
                 return r > 0
 
 @PositivePredicate.register(Expr)

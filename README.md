@@ -109,6 +109,13 @@ How it works (`sympy/assumptions/backends/`):
 The change to SymPy itself is small: `sympy/assumptions/backends/` (new),
 a hook of a few lines in `sympy/assumptions/ask.py`, 3 lines at the end of
 `sympy/__init__.py`, the xfail hook in `conftest.py`, and `setup.py`.
+One fix in SymPy's own handlers comes with it: the number handlers of
+`sympy/assumptions/handlers/order.py` and `sets.py` take an `evalf` result
+that is no Number (no `_prec`, as for `Operator(1)`, whose `is_number` is
+True) as unevaluated, and so answer None instead of raising
+`AttributeError`. Upstream raises too wherever `Q.real` is not False
+(`ask(Q.nonzero(Operator(pi)**2))`); for `Operator(1)` the class-level
+facts of non-commutative classes made it False.
 
 ## Installation
 

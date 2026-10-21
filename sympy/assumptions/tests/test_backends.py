@@ -187,3 +187,20 @@ def test_sympy_extras_statements():
     assert to_statement(Q.prime(x)) is None
     assert to_statement(Q.positive(x) | Q.prime(x)) is None
     assert to_statement(Q.prime(x), keep=True) == Q.prime(x)
+
+
+def test_number_handlers_non_number_evalf():
+    # PR #8 review: a non-commutative term with number arguments has
+    # is_number True, but evalf leaves it no Number (no _prec); with its
+    # class-level real = False asked of the backend, the handlers reach
+    # evalf: None, not AttributeError (with every backend)
+    from sympy.functions.elementary.complexes import Abs
+    from sympy.assumptions.refine import refine
+    from sympy.physics.quantum import Commutator, Operator
+    from sympy.physics.secondquant import F
+    x = Symbol('x')
+    for e in (Operator(1), F(1), Commutator(Operator(1), Operator(2)), Operator(S.Pi)**2):
+        for p in (Q.zero, Q.nonzero, Q.positive, Q.negative, Q.real, Q.imaginary):
+            assert ask(p(e)) in (None, False), (e, p)
+        refine(Abs(e))
+        AssumptionsWrapper(e, Q.positive(x)).is_zero
