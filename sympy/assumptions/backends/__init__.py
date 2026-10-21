@@ -45,7 +45,8 @@ that outlived the query, so an answer does not depend on which queries ran
 before it (sympy-satassume#10). An answer of the backend to ``expr.is_<fact>``
 is stored in the cache of ``expr`` with its implications; one that
 contradicts a fact stored there is ``None``, as one of the two is wrong.
-Until ``sympy`` has finished importing, SymPy's own code answers every query. The ``is_*`` properties of
+Until ``sympy`` has finished importing, SymPy's own code answers every query.
+The ``is_*`` properties of
 :class:`~sympy.assumptions.wrapper.AssumptionsWrapper` always use SymPy's own
 code: they ask the new system (so its backend) under the assumptions of the
 wrapper.
